@@ -1,0 +1,31 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run app",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/index.js",
+      "env": {
+        "NODE_ENV": "dev",
+        "ACCOUNT_SERVICE_DATABASE_TYPE": "postgres",
+        "ACCOUNT_SERVICE_DATABASE_PORT": "5432",
+        "ACCOUNT_SERVICE_DATABASE_HOST": "localhost",
+        "ACCOUNT_SERVICE_DATABASE_USERNAME": "panosc",
+        "ACCOUNT_SERVICE_DATABASE_PASSWORD": "panosc",
+        "ACCOUNT_SERVICE_DATABASE_NAME": "panosc",
+        "ACCOUNT_SERVICE_DATABASE_SCHEMA": "panosc",
+        "ACCOUNT_SERVICE_DATABASE_SYNCHRONIZE": "true",
+        "ACCOUNT_SERVICE_DATABASE_LOGGING": "false",
+        "ACCOUNT_SERVICE_LOG_LEVEL": "debug"
+      },
+      "preLaunchTask": "npm: build",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    }
+  ]
+}
