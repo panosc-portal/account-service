@@ -15,6 +15,16 @@ export class ApplicationConfig {
     level: string;
   };
 
+  idp: {
+    url: string;
+    clientId: string;
+    loginField: string;
+  };
+
+  misc: {
+    default_role_id: number;
+  };
+
   constructor(data?: Partial<ApplicationConfig>) {
     Object.assign(this, data);
   }
@@ -33,13 +43,20 @@ export function APPLICATION_CONFIG(): ApplicationConfig {
         password: process.env.ACCOUNT_SERVICE_DATABASE_PASSWORD,
         name: process.env.ACCOUNT_SERVICE_DATABASE_NAME,
         schema: process.env.ACCOUNT_SERVICE_DATABASE_SCHEMA,
-        synchronize:
-          process.env.ACCOUNT_SERVICE_DATABASE_SYNCHRONIZE === 'true',
-        logging: process.env.ACCOUNT_SERVICE_DATABASE_LOGGING === 'true',
+        synchronize: process.env.ACCOUNT_SERVICE_DATABASE_SYNCHRONIZE === 'true',
+        logging: process.env.ACCOUNT_SERVICE_DATABASE_LOGGING === 'true'
       },
       logging: {
-        level: process.env.ACCOUNT_SERVICE_LOG_LEVEL,
+        level: process.env.ACCOUNT_SERVICE_LOG_LEVEL
       },
+      idp: {
+        url: process.env.ACCOUNT_SERVICE_IDP,
+        clientId: process.env.ACCOUNT_SERVICE_CLIENT_ID,
+        loginField: process.env.ACCOUNT_SERVICE_LOGIN_FIELD
+      },
+      misc: {
+        default_role_id: parseInt(process.env.ACCOUNT_SERVICE_DEFAULT_ROLE_ID)
+      }
     };
   }
 
