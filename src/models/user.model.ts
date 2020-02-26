@@ -35,7 +35,7 @@ export class User {
 
   @property({
     type: 'string',
-    required: true
+    required: false
   })
   @Column({ length: 250, nullable: true })
   email: string;
