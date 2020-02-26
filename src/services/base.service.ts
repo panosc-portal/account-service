@@ -1,5 +1,6 @@
-import { BaseRepository } from '../repositories';
 import { Where, Command, NamedParameters, PositionalParameters, AnyObject } from '@loopback/repository';
+import { BaseRepository } from '../repositories';
+import { FindManyOptions } from 'typeorm';
 
 export class BaseService<T extends { id: number }, R extends BaseRepository<T, number>> {
   constructor(protected _repository: R) {}
@@ -22,6 +23,14 @@ export class BaseService<T extends { id: number }, R extends BaseRepository<T, n
 
   count(where?: Where): Promise<number> {
     return this._repository.count(where);
+  }
+
+  update(id: number, data: object): Promise<T> {
+    return this._repository.updateById(id, data);
+  }
+
+  get(options?: FindManyOptions<T>): Promise<T[]> {
+    return this._repository.find(options);
   }
 
   async execute(command: Command, parameters?: NamedParameters | PositionalParameters): Promise<AnyObject> {
