@@ -33,6 +33,10 @@ export class MeController extends BaseController {
 
     if (typeof token === 'string') {
       this._userInfo = await auth.authenticate(token);
+    } else if (Array.isArray(token)) {
+      this._userInfo = await auth.authenticate(token[0]);
+    } else {
+      throw new LoggedError('Invalid type for token');
     }
 
     const user: Promise<User> = this.getDatabaseUser();
@@ -44,8 +48,7 @@ export class MeController extends BaseController {
     // Checks that the selected login field is actually a property of openid client object
     const loginField = APPLICATION_CONFIG().idp.loginField;
     if (!this._userInfo.hasOwnProperty(loginField)) {
-      // new LoggedError('Invalid login field for authenticated OpenId client');
-      throw new HttpErrors[500]('Invalid login field for authenticated OpenId client');
+      throw new LoggedError('Invalid login field for authenticated OpenId client');
     }
 
     // Checks that the person is registered in the db
@@ -54,8 +57,7 @@ export class MeController extends BaseController {
 
     // Case of multiplons, throws
     if (users.length > 1) {
-      // new LoggedError('Several users registered under the given login field');
-      throw new HttpErrors[500]('Several users registered under the given login field');
+      throw new LoggedError('Several users registered under the given login field');
     }
 
     // Case where the user is not registered in the db
@@ -76,7 +78,7 @@ export class MeController extends BaseController {
       attrProvider.updateFromUserInfo(this._userInfo);
       attrProvider.completeUser();
     } catch (error) {
-      throw new HttpErrors[500]('Invalid/missing attribute');
+      throw new LoggedError('Invalid/missing attribute');
     }
 
     if (users.length > 0) {
