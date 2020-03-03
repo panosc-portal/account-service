@@ -43,7 +43,7 @@
             "--timeout",
             "999999",
             "--colors",
-            "${workspaceFolder}/dist/__tests__/acceptance/role.controller.acceptance.js"
+            "${workspaceFolder}/dist/__tests__/acceptance/controllers/role.controller.acceptance.js"
         ],
         "env": {
             "NODE_ENV": "test",

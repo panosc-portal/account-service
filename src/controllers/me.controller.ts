@@ -28,14 +28,14 @@ export class MeController extends BaseController {
     }
   })
   async me(): Promise<User> {
-    const token = this._request.headers.token;
+    const accessToken = this._request.headers.access_token;
 
     const auth = new KeyCloackAuthenticator();
 
-    if (typeof token === 'string') {
-      this._userInfo = await auth.authenticate(token);
-    } else if (Array.isArray(token)) {
-      this._userInfo = await auth.authenticate(token[0]);
+    if (typeof accessToken === 'string') {
+      this._userInfo = await auth.authenticate(accessToken);
+    } else if (Array.isArray(accessToken)) {
+      this._userInfo = await auth.authenticate(accessToken[0]);
     } else {
       throw new LoggedError('Invalid type for token');
     }
