@@ -29,8 +29,8 @@ export class UserController extends BaseController {
       }
     }
   })
-  getAllUsers(): Promise<User[]> {
-    return this._userService.getAll();
+  async getAllUsers(): Promise<User[]> {
+    return await this._userService.getAll();
   }
 
   @get('/users/{id}', {
@@ -42,8 +42,8 @@ export class UserController extends BaseController {
       }
     }
   })
-  getUser(@param.path.number('id') id: number): Promise<User> {
-    return this._userService.getById(id);
+  async getUser(@param.path.number('id') id: number): Promise<User> {
+    return await this._userService.getById(id);
   }
 
   @post('/users/{userId}/roles/{roleId}', {
@@ -73,7 +73,7 @@ export class UserController extends BaseController {
       uid: user.uid,
       gid: user.gid,
       active: user.active,
-      homePath: user.homePath,
+      homedir: user.homedir,
       role: persistedRole
     });
 
@@ -138,7 +138,7 @@ export class UserController extends BaseController {
     const user: User = new User({
       username: userCreator.username,
       email: userCreator.email,
-      homePath: userCreator.homePath,
+      homedir: userCreator.homedir,
       uid: userCreator.uid,
       gid: userCreator.gid,
       active: userCreator.active,

@@ -6,8 +6,8 @@ module.exports = {
       'error',
       {
         private: '^_',
-        protected: '^_',
-      },
-    ],
-  },
+        protected: '^_'
+      }
+    ]
+  }
 };

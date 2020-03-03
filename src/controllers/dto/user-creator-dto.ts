@@ -16,7 +16,7 @@ export class UserCreatorDto {
   @property({
     type: 'string'
   })
-  homePath: string;
+  homedir: string;
 
   @property({
     type: 'number'

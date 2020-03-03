@@ -23,6 +23,7 @@ export class ApplicationConfig {
 
   misc: {
     default_role_id: number;
+    attribute_provider: string;
   };
 
   constructor(data?: Partial<ApplicationConfig>) {
@@ -55,7 +56,8 @@ export function APPLICATION_CONFIG(): ApplicationConfig {
         loginField: process.env.ACCOUNT_SERVICE_LOGIN_FIELD
       },
       misc: {
-        default_role_id: parseInt(process.env.ACCOUNT_SERVICE_DEFAULT_ROLE_ID)
+        default_role_id: parseInt(process.env.ACCOUNT_SERVICE_DEFAULT_ROLE_ID),
+        attribute_provider: process.env.ACCOUNT_SERVICE_ATTRIBUTE_PROVIDER
       }
     };
   }

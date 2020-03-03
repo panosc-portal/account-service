@@ -11,10 +11,10 @@ export class AttributeProvider {
     this._user.email = userInfo['email'];
     this._user.uid = userInfo['uid'];
     this._user.gid = userInfo['gid'];
-    this._user.homePath = userInfo['homeDirectory'];
+    this._user.homedir = userInfo['homeDirectory'];
   }
 
-  completeUser() {
-    // To be implemeneted if updateFromUserInfo is not sufficient for feeding user
+  update() {
+    // To be implemented if updateFromUserInfo is not sufficient for feeding user
   }
 }

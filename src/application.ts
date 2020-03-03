@@ -7,7 +7,7 @@ import { ServiceMixin } from '@loopback/service-proxy';
 import path from 'path';
 import { MySequence } from './sequence';
 
-export class AccountApplication extends BootMixin(ServiceMixin(RepositoryMixin(RestApplication))) {
+export class AccountServiceApplication extends BootMixin(ServiceMixin(RepositoryMixin(RestApplication))) {
   constructor(options: ApplicationConfig = {}) {
     super(options);
 

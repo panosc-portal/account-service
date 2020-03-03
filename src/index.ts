@@ -1,13 +1,13 @@
-import { AccountApplication } from './application';
+import { AccountServiceApplication } from './application';
 import * as dotenv from 'dotenv';
 import { ApplicationConfig } from '@loopback/core';
 
 dotenv.config();
 
-export { AccountApplication };
+export { AccountServiceApplication };
 
 export async function main(options: ApplicationConfig = {}) {
-  const app = new AccountApplication(options);
+  const app = new AccountServiceApplication(options);
   await app.boot();
   await app.start();
 

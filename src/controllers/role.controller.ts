@@ -23,8 +23,25 @@ export class RoleController extends BaseController {
       }
     }
   })
-  getAllRoles(): Promise<Role[]> {
-    return this._roleService.getAll();
+  async getAllRoles(): Promise<Role[]> {
+    return await this._roleService.getAll();
+  }
+
+  @get('/roles/{id}', {
+    summary: 'Gets a role',
+    responses: {
+      '200': {
+        description: 'Ok',
+        content: {
+          'application/json': {
+            schema: { schema: getModelSchemaRef(Role) }
+          }
+        }
+      }
+    }
+  })
+  async getRole(@param.path.number('id') id: number): Promise<Role> {
+    return await this._roleService.getById(id);
   }
 
   @post('/roles', {
