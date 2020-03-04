@@ -47,14 +47,18 @@ describe('RoleController', () => {
   });
 
   it('invokes DELETE /roles/', async () => {
-    const res = await client.delete('/api/v1/roles').expect(200);
+    await client.delete('/api/v1/roles').expect(204);
+
+    const res = await client.get('/api/v1/roles').expect(200);
 
     const roles = res.body as Role[];
     expect(roles.length).to.equal(0);
   });
 
   it('invokes DELETE /roles/{id}', async () => {
-    const res = await client.delete('/api/v1/roles/1').expect(200);
+    await client.delete('/api/v1/roles/1').expect(200);
+
+    const res = await client.get('/api/v1/roles').expect(200);
 
     const roles = res.body as Role[];
 

@@ -64,7 +64,7 @@ export class User {
   @property({
     type: Role
   })
-  @ManyToOne(type => Role, { eager: true, nullable: true })
+  @ManyToOne(type => Role, { eager: true, nullable: true, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'role_id' })
   role: Role;
 
