@@ -102,9 +102,14 @@ export class UserController extends BaseController {
     }
   })
   async deleteAllUser() {
-    const allUsers = await this._userService.getAll();
+    const users = await this._userService.getAll();
 
-    allUsers.forEach(user => this._userService.delete(user));
+    let success = true;
+    for (const user of users) {
+      success = success && (await this._userService.delete(user));
+    }
+
+    return success;
   }
 
   @del('/users/{id}', {

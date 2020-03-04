@@ -90,6 +90,11 @@ export class RoleController extends BaseController {
   async deleteAllRoles() {
     const roles: Role[] = await this._roleService.getAll();
 
-    roles.forEach(role => this._roleService.delete(role));
+    let success = true;
+    for (const role of roles) {
+      success = success && (await this._roleService.delete(role));
+    }
+
+    return success;
   }
 }
