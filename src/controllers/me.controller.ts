@@ -4,7 +4,7 @@ import { APPLICATION_CONFIG } from '../application-config';
 import { BaseController } from './base.controller';
 import { Role, User } from '../models';
 import { RoleService, UserService } from '../services';
-import { AttributeProvider, KeyCloackAuthenticator, LoggedError } from '../utils';
+import { KeyCloackAuthenticator, LoggedError } from '../utils';
 import { AttributeProviderHelper } from '../utils';
 
 export class MeController extends BaseController {
@@ -76,11 +76,11 @@ export class MeController extends BaseController {
 
     try {
       const attrProviderHelper = new AttributeProviderHelper();
-      const attrProvider = attrProviderHelper.getHelper();
-      attrProvider.updateFromUserInfo(this._userInfo);
-      attrProvider.update();
+      const attrProvider = attrProviderHelper.getProvider();
+      attrProvider.updateFromUserInfo(user, this._userInfo);
+      attrProvider.update(user);
     } catch (error) {
-      throw new LoggedError('Invalid/missing attribute');
+      throw new LoggedError(error);
     }
 
     if (users.length > 0) {

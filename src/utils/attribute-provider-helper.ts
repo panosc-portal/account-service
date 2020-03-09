@@ -1,55 +1,50 @@
 import { APPLICATION_CONFIG } from '../application-config';
+import { IAttributeProvider } from '../interfaces';
 import { LoggedError } from '.';
 
-interface IAttributeProvider {
-  updateFromUserInfo(userInfo: object): any;
-  update(): any;
-}
-
 export class AttributeProviderHelper {
-  private _attributeProviderHelper: IAttributeProvider = null;
+  private _attributeProvider: IAttributeProvider = null;
 
-  _getHelper(): IAttributeProvider {
-    if (this._attributeProviderHelper == null) {
+  private _loadProvider() {
+    if (this._attributeProvider == null) {
       // Fech the path to concrete implementation of IAttributeProvider from the user environment
-      const attributeProviderHelperPath = APPLICATION_CONFIG().misc.attribute_provider;
+      const attributeProviderClassPath = APPLICATION_CONFIG().misc.attribute_provider;
       // Case where a path has been defined by the user
-      if (attributeProviderHelperPath != null) {
-        try {
-          let fullPath = attributeProviderHelperPath;
-          // Case of a relative path
-          if (!attributeProviderHelperPath.startsWith('/')) {
-            fullPath = `../../${attributeProviderHelperPath}`;
-          }
-          const attributeProviderHelper = require(fullPath) as IAttributeProvider;
-          this._attributeProviderHelper = attributeProviderHelper;
-        } catch (error) {
-          throw new LoggedError(`Could not load AttributProvider with the file path '${attributeProviderHelperPath}'`);
+      if (attributeProviderClassPath != null) {
+        // Case of a relative path
+        if (!attributeProviderClassPath.startsWith('/')) {
+          throw new LoggedError('The path to attribute provider must be absolute.');
         }
+        const attributeProvider = require(attributeProviderClassPath) as IAttributeProvider;
+        this._validateProvider(attributeProvider);
+        this._attributeProvider = attributeProvider;
       }
     }
-
-    return this._attributeProviderHelper;
   }
 
-  _validateHelper() {
-    if (!this._attributeProviderHelper.updateFromUserInfo) {
+  private _validateProvider(attributeProvider: IAttributeProvider) {
+    if (!attributeProvider) {
+      throw new LoggedError('The attribute provider is null');
+    }
+
+    if (!attributeProvider.updateFromUserInfo) {
       throw new LoggedError('Uncomplete IAttributeProvider interface: missing updateFromUserInfo method');
     }
 
-    if (!this._attributeProviderHelper.update) {
+    if (!attributeProvider.update) {
       throw new LoggedError('Uncomplete IAttributeProvider interface: missing update method');
     }
-
-    return this._attributeProviderHelper;
   }
 
-  getHelper() {
-    // Sets the concrete AttributeProvider class if possible. Throws otherwise.
-    this._getHelper();
-    // Check that the user provided class respects the interface contract.
-    this._validateHelper();
+  getProvider() {
+    // If already one available just returns
+    if (this._attributeProvider) {
+      return this._attributeProvider;
+    }
 
-    return this._attributeProviderHelper;
+    // Sets the concrete AttributeProvider class if possible. Throws otherwise.
+    this._loadProvider();
+
+    return this._attributeProvider;
   }
 }

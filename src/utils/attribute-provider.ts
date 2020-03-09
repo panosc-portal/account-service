@@ -1,20 +1,13 @@
 import { User } from '../models';
 
-export class AttributeProvider {
-  private _user: User;
+export function updateFromUserInfo(user: User, userInfo: object) {
+  user.username = userInfo['preferred_username'];
+  user.email = userInfo['email'];
+  user.uid = userInfo['uid'];
+  user.gid = userInfo['gid'];
+  user.homedir = userInfo['homeDirectory'];
+}
 
-  constructor(user: User) {
-    this._user = user;
-  }
-  updateFromUserInfo(userInfo: object) {
-    this._user.username = userInfo['preferred_username'];
-    this._user.email = userInfo['email'];
-    this._user.uid = userInfo['uid'];
-    this._user.gid = userInfo['gid'];
-    this._user.homedir = userInfo['homeDirectory'];
-  }
-
-  update() {
-    // To be implemented if updateFromUserInfo is not sufficient for feeding user
-  }
+export function update(user: User) {
+  // To be implemented if updateFromUserInfo is not sufficient for feeding user
 }
