@@ -65,12 +65,11 @@ export class MeController extends BaseController {
     let user: User;
     if (users.length > 0) {
       user = users[0];
-      const role = user.role;
     } else {
       const role: Role = await this._roleService.getById(APPLICATION_CONFIG().misc.default_role_id);
       user = new User({
         username: username,
-        role: role
+        roles: [role]
       });
     }
 

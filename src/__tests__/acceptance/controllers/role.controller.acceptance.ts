@@ -47,7 +47,7 @@ describe('RoleController', () => {
   });
 
   it('invokes DELETE /roles/', async () => {
-    await client.delete('/api/v1/roles').expect(204);
+    await client.delete('/api/v1/roles').expect(200);
 
     const res = await client.get('/api/v1/roles').expect(200);
 

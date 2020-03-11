@@ -1,5 +1,5 @@
 import { model, property } from '@loopback/repository';
-import { Column, Entity, CreateDateColumn, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, CreateDateColumn, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Role } from './role.model';
 
 @Entity()
@@ -62,11 +62,16 @@ export class User {
   createdAt: Date;
 
   @property({
-    type: Role
+    type: 'array',
+    itemType: Role
   })
-  @ManyToOne(type => Role, { eager: true, nullable: true, onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'role_id' })
-  role: Role;
+  @ManyToMany(type => Role, { eager: true, nullable: true })
+  @JoinTable({
+    name: 'user_role',
+    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'role_id', referencedColumnName: 'id' }
+  })
+  roles: Role[];
 
   constructor(data?: Partial<User>) {
     Object.assign(this, data);

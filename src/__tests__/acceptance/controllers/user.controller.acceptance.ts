@@ -51,7 +51,7 @@ describe('UserController', () => {
   });
 
   it('invokes DELETE /users/', async () => {
-    await client.delete('/api/v1/users').expect(204);
+    await client.delete('/api/v1/users').expect(200);
 
     const res = await client.get('/api/v1/users').expect(200);
 
@@ -79,8 +79,8 @@ describe('UserController', () => {
     expect(users[0].email).to.equal('jane.murphy@mail.net');
     expect(users[0].homedir).to.equal('/home/murphy');
 
-    expect(users[0].role.id).to.equal(2);
-    expect(users[0].role.name).to.equal('user');
-    expect(users[0].role.description).to.equal('normal user role');
+    expect(users[0].roles[0].id).to.equal(2);
+    expect(users[0].roles[0].name).to.equal('user');
+    expect(users[0].roles[0].description).to.equal('normal user role');
   });
 });

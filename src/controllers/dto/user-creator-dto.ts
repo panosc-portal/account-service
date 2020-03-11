@@ -34,7 +34,8 @@ export class UserCreatorDto {
   active: boolean;
 
   @property({
-    type: 'number'
+    type: 'array',
+    itemType: 'number'
   })
-  role: number;
+  roles: number[];
 }
