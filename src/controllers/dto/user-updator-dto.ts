@@ -1,7 +1,10 @@
 import { model, property } from '@loopback/repository';
 
 @model()
-export class UserCreatorDto {
+export class UserUpdatorDto {
+  @property({ type: 'number' })
+  id: number;
+
   @property({
     type: 'string',
     required: true
@@ -39,7 +42,7 @@ export class UserCreatorDto {
   })
   roles: number[];
 
-  constructor(data?: Partial<UserCreatorDto>) {
+  constructor(data?: Partial<UserUpdatorDto>) {
     Object.assign(this, data);
   }
 }

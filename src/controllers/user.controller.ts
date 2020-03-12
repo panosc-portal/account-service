@@ -1,12 +1,10 @@
 import { inject } from '@loopback/core';
-import { del, get, getModelSchemaRef, param, post, requestBody } from '@loopback/rest';
+import { del, get, getModelSchemaRef, param, post, put, requestBody } from '@loopback/rest';
 
 import { BaseController } from './base.controller';
-import { Role } from '../models';
-import { UserCreatorDto } from './dto/user-creator-dto';
-import { RoleService } from '../services';
-import { UserService } from '../services';
-import { User } from '../models';
+import { UserCreatorDto, UserUpdatorDto } from './dto';
+import { Role, User } from '../models';
+import { RoleService, UserService } from '../services';
 import { LoggedError } from '../utils';
 
 export class UserController extends BaseController {
@@ -87,7 +85,7 @@ export class UserController extends BaseController {
       }
     }
   })
-  async deleteUserRole(@param.path.number('userId') userId: number, @param.path.string('roleId') roleId: number) {
+  async deleteUserRole(@param.path.number('userId') userId: number, @param.path.number('roleId') roleId: number) {
     const user: User = await this._userService.getById(userId);
     this.throwNotFoundIfNull(user, 'User with given id does not exist');
 
@@ -96,13 +94,11 @@ export class UserController extends BaseController {
     this.throwNotFoundIfNull(user, 'Role with given id does not exist');
 
     // Fetch the user roles (if any)
-    const userRoles = user.roles;
-    const ids = userRoles.map(({ id }) => id);
-    const index = ids.indexOf(newRole.id);
-    // If the new role is already registered as one of the user roles, remove it
-    if (index >= 0) {
-      userRoles.splice(index, 1);
-    }
+    user.roles = user.roles.filter(role => role.id !== newRole.id);
+
+    this._userService.save(user);
+
+    return user;
   }
 
   @del('/users', {
@@ -176,5 +172,57 @@ export class UserController extends BaseController {
     const persistedUser = await this._userService.save(user);
 
     return persistedUser;
+  }
+
+  @put('/users/{userId}', {
+    summary: 'Updates a user by a given identifier',
+    responses: {
+      '200': {
+        description: 'Ok',
+        content: {
+          'application/json': {
+            schema: getModelSchemaRef(User)
+          }
+        }
+      }
+    }
+  })
+  async update(
+    @param.path.number('userId') userId: number,
+    @requestBody() userUpdatorDto: UserUpdatorDto
+  ): Promise<User> {
+    this.throwBadRequestIfNull(userUpdatorDto, 'Invalid user in request');
+    this.throwBadRequestIfNotEqual(userId, userUpdatorDto.id, 'Id in path is not the same as body id');
+
+    // Get the user
+    const user = await this._userService.getById(userId);
+    this.throwNotFoundIfNull(user, 'User with given id does not exist');
+
+    // Remove duplicates roles if any
+    const temp = new Set(userUpdatorDto.roles);
+    const userRoles = [...temp];
+
+    // Loop over the user roles and check that ALL of them are valid roles
+    let roles: Role[] = [];
+    for (const roleId of userRoles) {
+      const role = await this._roleService.getById(roleId);
+      if (!role) {
+        throw new LoggedError(`Role with id ${roleId} does not exist`);
+      }
+      roles.push(role);
+    }
+
+    const updatedUser = new User({
+      id: userUpdatorDto.id,
+      username: userUpdatorDto.username,
+      email: userUpdatorDto.email,
+      homedir: userUpdatorDto.homedir,
+      uid: userUpdatorDto.uid,
+      gid: userUpdatorDto.gid,
+      active: userUpdatorDto.active,
+      roles: roles
+    });
+
+    return this._userService.save(updatedUser);
   }
 }

@@ -1,9 +1,10 @@
-import { del, get, param, post, getModelSchemaRef, requestBody } from '@loopback/rest';
-import { BaseController } from './base.controller';
-import { RoleService } from '../services';
-import { Role } from '../models';
 import { inject } from '@loopback/core';
-import { RoleCreatorDto } from './dto/role-creator-dto';
+import { del, get, param, post, put, getModelSchemaRef, requestBody } from '@loopback/rest';
+
+import { BaseController } from './base.controller';
+import { RoleCreatorDto, RoleUpdatorDto } from './dto';
+import { Role } from '../models';
+import { RoleService } from '../services';
 
 export class RoleController extends BaseController {
   constructor(@inject('services.RoleService') private _roleService: RoleService) {
@@ -62,6 +63,39 @@ export class RoleController extends BaseController {
     const persistedRole = await this._roleService.save(role);
 
     return persistedRole;
+  }
+
+  @put('/roles/{roleId}', {
+    summary: 'Update a role by a given identifier',
+    responses: {
+      '200': {
+        description: 'Ok',
+        content: {
+          'application/json': {
+            schema: getModelSchemaRef(Role)
+          }
+        }
+      }
+    }
+  })
+  async update(
+    @param.path.number('roleId') roleId: number,
+    @requestBody() roleUpdatorDto: RoleUpdatorDto
+  ): Promise<Role> {
+    this.throwBadRequestIfNull(roleUpdatorDto, 'Invalid role in request');
+    this.throwBadRequestIfNotEqual(roleId, roleUpdatorDto.id, 'Id in path is not the same as body id');
+
+    // Get the role
+    const role = await this._roleService.getById(roleId);
+    this.throwNotFoundIfNull(role, 'Role with given id does not exist');
+
+    const updatedRole = new Role({
+      id: roleUpdatorDto.id,
+      name: roleUpdatorDto.name,
+      description: roleUpdatorDto.description
+    });
+
+    return this._roleService.save(updatedRole);
   }
 
   @del('/roles/{id}', {
