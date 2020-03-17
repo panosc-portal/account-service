@@ -30,6 +30,7 @@
     "migrate": "node ./dist/migrate",
     "prestart": "npm run build",
     "start": "node -r source-map-support/register .",
+    "debug": "nodemon -r source-map-support/register --inspect=0.0.0.0 .",
     "prepublishOnly": "npm run test"
   },
   "repository": {
@@ -78,6 +79,7 @@
     "macho": "^1.4.0",
     "source-map-support": "^0.5.16",
     "sqlite3": "^4.1.1",
-    "typescript": "~3.7.5"
+    "typescript": "~3.7.5",
+    "nodemon": "^2.0.2"
   }
 }
