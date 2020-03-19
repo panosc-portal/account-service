@@ -22,8 +22,9 @@ export class KeyCloackAuthenticator {
       });
       const userInfo = await client.userinfo(token);
       return userInfo;
-    } catch {
-      throw new LoggedError('Authentication error');
+    
+    } catch (error) {
+      throw new LoggedError(`Authentication error: ${error.message}`);
     }
   }
 }
