@@ -82,11 +82,7 @@ export class MeController extends BaseController {
       throw new LoggedError(error);
     }
 
-    if (user.id != null) {
-      user = await this._userService.update(user.id, user);
-    } else {
-      user = await this._userService.save(user);
-    }
+    user = await this._userService.save(user);
 
     return user;
   }

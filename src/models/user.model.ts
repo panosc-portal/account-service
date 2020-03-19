@@ -13,6 +13,13 @@ export class User {
   id: number;
 
   @property({
+    type: 'number',
+    required: false
+  })
+  @Column({name: 'facility_user_id', type: 'integer', nullable: true})
+  facilityUserId: number;
+
+  @property({
     type: 'string',
     required: true
   })

@@ -6,6 +6,7 @@ export function updateFromUserInfo(user: User, userInfo: object) {
   user.uid = userInfo['uid'];
   user.gid = userInfo['gid'];
   user.homedir = userInfo['homeDirectory'];
+  user.facilityUserId = userInfo['employeeNumber'];
 }
 
 export function update(user: User) {
