@@ -3,6 +3,11 @@ import { model, property } from '@loopback/repository';
 @model()
 export class UserCreatorDto {
   @property({
+    type: 'number'
+  })
+  facilityUserId: number;
+
+  @property({
     type: 'string',
     required: true
   })
@@ -16,7 +21,7 @@ export class UserCreatorDto {
   @property({
     type: 'string'
   })
-  homedir: string;
+  homePath: string;
 
   @property({
     type: 'number'

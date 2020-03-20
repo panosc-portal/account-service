@@ -51,8 +51,8 @@ export class User {
     type: 'string',
     required: true
   })
-  @Column({ length: 250, nullable: false })
-  homedir: string;
+  @Column({ name: 'home_path', length: 250, nullable: false })
+  homePath: string;
 
   @property({
     type: 'boolean',

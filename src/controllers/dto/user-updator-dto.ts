@@ -6,6 +6,11 @@ export class UserUpdatorDto {
   id: number;
 
   @property({
+    type: 'number'
+  })
+  facilityUserId: number;
+
+  @property({
     type: 'string',
     required: true
   })
@@ -19,7 +24,7 @@ export class UserUpdatorDto {
   @property({
     type: 'string'
   })
-  homedir: string;
+  homePath: string;
 
   @property({
     type: 'number'

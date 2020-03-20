@@ -7,6 +7,11 @@ export class UserDto {
   id: number;
 
   @property({
+    type: 'number'
+  })
+  facilityUserId: number;
+
+  @property({
     type: 'string',
     required: true
   })
@@ -20,7 +25,7 @@ export class UserDto {
   @property({
     type: 'string'
   })
-  homedir: string;
+  homePath: string;
 
   @property({
     type: 'number'

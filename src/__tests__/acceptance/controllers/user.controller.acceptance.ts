@@ -40,11 +40,12 @@ describe('UserController', () => {
     const initUsers = initRes.body as UserDto[];
 
     const userData = new UserCreatorDto({
+      facilityUserId: 9999,
       username: 'billy',
       uid: 3000,
       gid: 4000,
       email: 'billy@mail.net',
-      homedir: '/home/billy',
+      homePath: '/home/billy',
       active: true,
       roles: [1]
     });
@@ -73,7 +74,7 @@ describe('UserController', () => {
     expect(user2.gid).to.equal(user.gid);
     expect(user2.username).to.equal(user.username);
     expect(user2.email).to.equal(user.email);
-    expect(user2.homedir).to.equal(user.homedir);
+    expect(user2.homePath).to.equal(user.homePath);
     expect(user2.active).to.equal(user.active);
     expect(user2.roles[0].id).to.equal(user.roles[0].id);
     expect(user2.roles[0].name).to.equal(user.roles[0].name);
@@ -98,11 +99,12 @@ describe('UserController', () => {
 
     const updatedUser = new UserUpdatorDto({
       id: user.id,
+      facilityUserId: user.facilityUserId,
       username: newUsername,
       uid: newUid,
       gid: newGid,
       email: newEmail,
-      homedir: newHomedir,
+      homePath: newHomedir,
       active: newActive,
       roles: newRole
     });
@@ -124,7 +126,7 @@ describe('UserController', () => {
     expect(user2.uid).to.equal(7000);
     expect(user2.gid).to.equal(8000);
     expect(user2.email).to.equal('bobby@mail.net');
-    expect(user2.homedir).to.equal('/home/bobby');
+    expect(user2.homePath).to.equal('/home/bobby');
     expect(user2.active).to.equal(false);
     expect(user2.roles[0].id).to.equal(2);
     expect(user2.roles[0].name).to.equal('user');
@@ -143,7 +145,7 @@ describe('UserController', () => {
     expect(user.uid).to.equal(1000);
     expect(user.gid).to.equal(2000);
     expect(user.email).to.equal('john.doe@mail.net');
-    expect(user.homedir).to.equal('/home/doe');
+    expect(user.homePath).to.equal('/home/doe');
     expect(user.active).to.equal(true);
   });
 
@@ -174,7 +176,7 @@ describe('UserController', () => {
     expect(users[0].gid).to.equal(2001);
     expect(users[0].active).to.equal(true);
     expect(users[0].email).to.equal('jane.murphy@mail.net');
-    expect(users[0].homedir).to.equal('/home/murphy');
+    expect(users[0].homePath).to.equal('/home/murphy');
 
     expect(users[0].roles[0].id).to.equal(2);
     expect(users[0].roles[0].name).to.equal('user');

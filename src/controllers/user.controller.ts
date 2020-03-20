@@ -160,9 +160,10 @@ export class UserController extends BaseController {
     }
 
     const user: User = new User({
+      facilityUserId: userCreator.facilityUserId,
       username: userCreator.username,
       email: userCreator.email,
-      homedir: userCreator.homedir,
+      homePath: userCreator.homePath,
       uid: userCreator.uid,
       gid: userCreator.gid,
       active: userCreator.active,
@@ -214,9 +215,10 @@ export class UserController extends BaseController {
 
     const updatedUser = new User({
       id: userUpdatorDto.id,
+      facilityUserId: userUpdatorDto.facilityUserId,
       username: userUpdatorDto.username,
       email: userUpdatorDto.email,
-      homedir: userUpdatorDto.homedir,
+      homePath: userUpdatorDto.homePath,
       uid: userUpdatorDto.uid,
       gid: userUpdatorDto.gid,
       active: userUpdatorDto.active,

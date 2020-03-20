@@ -5,7 +5,7 @@ export function updateFromUserInfo(user: User, userInfo: object) {
   user.email = userInfo['email'];
   user.uid = userInfo['uid'];
   user.gid = userInfo['gid'];
-  user.homedir = userInfo['homeDirectory'];
+  user.homePath = userInfo['homeDirectory'];
   user.facilityUserId = userInfo['employeeNumber'];
 }
 
