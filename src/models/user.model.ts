@@ -14,9 +14,9 @@ export class User {
 
   @property({
     type: 'number',
-    required: false
+    required: true
   })
-  @Column({name: 'facility_user_id', type: 'integer', nullable: true})
+  @Column({name: 'facility_user_id', type: 'integer'})
   facilityUserId: number;
 
   @property({
