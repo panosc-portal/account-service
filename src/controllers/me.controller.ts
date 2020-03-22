@@ -4,7 +4,7 @@ import { APPLICATION_CONFIG } from '../application-config';
 import { BaseController } from './base.controller';
 import { Role, User } from '../models';
 import { RoleService, UserService } from '../services';
-import { KeyCloackAuthenticator, LoggedError } from '../utils';
+import { KeyCloackAuthenticator, LoggedError, AuthenticationError } from '../utils';
 import { AttributeProviderHelper } from '../utils';
 
 export class MeController extends BaseController {
@@ -28,21 +28,31 @@ export class MeController extends BaseController {
     }
   })
   async me(): Promise<User> {
-    const accessToken = this._request.headers.access_token;
+    try {
+      const accessToken = this._request.headers.access_token;
 
-    const auth = new KeyCloackAuthenticator();
-
-    if (typeof accessToken === 'string') {
-      this._userInfo = await auth.authenticate(accessToken);
-    } else if (Array.isArray(accessToken)) {
-      this._userInfo = await auth.authenticate(accessToken[0]);
-    } else {
-      throw new LoggedError('Invalid type for token');
+      const auth = new KeyCloackAuthenticator();
+  
+      if (typeof accessToken === 'string') {
+        this._userInfo = await auth.authenticate(accessToken);
+      } else if (Array.isArray(accessToken)) {
+        this._userInfo = await auth.authenticate(accessToken[0]);
+      } else {
+        throw new LoggedError('Invalid type for token');
+      }
+  
+      const user = await this.getDatabaseUser();
+  
+      return user;
+  
+    } catch (error) {
+      if (error instanceof AuthenticationError) {
+        throw new HttpErrors.Unauthorized(error.message);
+      
+      } else {
+        throw new HttpErrors.InternalServerError(error.message);
+      }
     }
-
-    const user: Promise<User> = this.getDatabaseUser();
-
-    return user;
   }
 
   async getDatabaseUser(): Promise<User> {
@@ -78,8 +88,9 @@ export class MeController extends BaseController {
       const attrProvider = attrProviderHelper.getProvider();
       attrProvider.updateFromUserInfo(user, this._userInfo);
       attrProvider.update(user);
+    
     } catch (error) {
-      throw new LoggedError(error);
+      throw new LoggedError(error.message);
     }
 
     user = await this._userService.save(user);

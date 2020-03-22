@@ -1,11 +1,10 @@
 import { APPLICATION_CONFIG } from '../application-config';
 const { Issuer } = require('openid-client');
-import { LoggedError } from '.';
+import { AuthenticationError } from './authentication-error';
 
 export class KeyCloackAuthenticator {
   private _idp: string;
   private _clientId: string;
-  private _userInfo: any;
 
   constructor() {
     this._idp = APPLICATION_CONFIG().idp.url;
@@ -24,7 +23,7 @@ export class KeyCloackAuthenticator {
       return userInfo;
     
     } catch (error) {
-      throw new LoggedError(`Authentication error: ${error.message}`);
+      throw new AuthenticationError(`Authentication error: ${error.message}`);
     }
   }
 }
