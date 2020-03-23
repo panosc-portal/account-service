@@ -27,8 +27,8 @@ export class AttributeProviderHelper {
       throw new LoggedError('The attribute provider is null');
     }
 
-    if (!attributeProvider.updateFromUserInfo) {
-      throw new LoggedError('Uncomplete IAttributeProvider interface: missing updateFromUserInfo method');
+    if (!attributeProvider.updateFromAccountInfo) {
+      throw new LoggedError('Uncomplete IAttributeProvider interface: missing updateFromAccountInfo method');
     }
 
     if (!attributeProvider.update) {

@@ -4,7 +4,7 @@ import { Role } from './role.model';
 
 @Entity()
 @model()
-export class User {
+export class Account {
   @property({
     type: 'number',
     required: true
@@ -16,8 +16,8 @@ export class User {
     type: 'number',
     required: true
   })
-  @Column({name: 'facility_user_id', type: 'integer'})
-  facilityUserId: number;
+  @Column({ name: 'user_id', type: 'integer' })
+  userId: number;
 
   @property({
     type: 'string',
@@ -80,7 +80,7 @@ export class User {
   })
   roles: Role[];
 
-  constructor(data?: Partial<User>) {
+  constructor(data?: Partial<Account>) {
     Object.assign(this, data);
   }
 }

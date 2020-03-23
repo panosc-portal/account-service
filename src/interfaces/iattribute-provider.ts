@@ -1,6 +1,6 @@
-import { User } from '../models';
+import { Account } from '../models';
 
 export interface IAttributeProvider {
-  updateFromUserInfo(user: User, userInfo: object): any;
-  update(user: User): any;
+  updateFromAccountInfo(account: Account, accountInfo: object): any;
+  update(account: Account): any;
 }

@@ -1,10 +1,10 @@
-import { User } from '../models';
+import { Account } from '../models';
 import { inject } from '@loopback/core';
 import { BaseRepository } from './base.repository';
 import { TypeORMDataSource } from '../datasources';
 
-export class UserRepository extends BaseRepository<User, number> {
+export class AccountRepository extends BaseRepository<Account, number> {
   constructor(@inject('datasources.typeorm') dataSource: TypeORMDataSource) {
-    super(dataSource, User);
+    super(dataSource, Account);
   }
 }

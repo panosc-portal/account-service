@@ -2,14 +2,14 @@ import { model, property } from '@loopback/repository';
 import { Role } from '../../models';
 
 @model()
-export class UserDto {
+export class AccountDto {
   @property({ type: 'number' })
   id: number;
 
   @property({
     type: 'number'
   })
-  facilityUserId: number;
+  userId: number;
 
   @property({
     type: 'string',
@@ -48,7 +48,7 @@ export class UserDto {
   })
   roles: Role[];
 
-  constructor(data?: Partial<UserDto>) {
+  constructor(data?: Partial<AccountDto>) {
     Object.assign(this, data);
   }
 }

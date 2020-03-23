@@ -2,82 +2,80 @@ import { inject } from '@loopback/core';
 import { get, getModelSchemaRef, HttpErrors, Request, RestBindings } from '@loopback/rest';
 import { APPLICATION_CONFIG } from '../application-config';
 import { BaseController } from './base.controller';
-import { Role, User } from '../models';
-import { RoleService, UserService } from '../services';
+import { Account, Role } from '../models';
+import { AccountService, RoleService } from '../services';
 import { KeyCloackAuthenticator, LoggedError, AuthenticationError } from '../utils';
 import { AttributeProviderHelper } from '../utils';
 
 export class MeController extends BaseController {
-  private _userInfo: object;
+  private _accountInfo: object;
 
   constructor(
     @inject(RestBindings.Http.REQUEST) private _request: Request,
     @inject('services.RoleService') private _roleService: RoleService,
-    @inject('services.UserService') private _userService: UserService
+    @inject('services.AccountService') private _accountService: AccountService
   ) {
     super();
   }
 
   @get('/me', {
-    summary: 'Authenticates a JWT token and returns a User object with its associated Role',
+    summary: 'Authenticates a JWT token and returns an Account object with its associated Role',
     responses: {
       '200': {
         description: 'Ok',
-        content: { 'application/json': { schema: getModelSchemaRef(User) } }
+        content: { 'application/json': { schema: getModelSchemaRef(Account) } }
       }
     }
   })
-  async me(): Promise<User> {
+  async me(): Promise<Account> {
     try {
       const accessToken = this._request.headers.access_token;
 
       const auth = new KeyCloackAuthenticator();
-  
+
       if (typeof accessToken === 'string') {
-        this._userInfo = await auth.authenticate(accessToken);
+        this._accountInfo = await auth.authenticate(accessToken);
       } else if (Array.isArray(accessToken)) {
-        this._userInfo = await auth.authenticate(accessToken[0]);
+        this._accountInfo = await auth.authenticate(accessToken[0]);
       } else {
         throw new LoggedError('Invalid type for token');
       }
-  
-      const user = await this.getDatabaseUser();
-  
-      return user;
-  
+
+      const account = await this.getDatabaseAccount();
+
+      return account;
     } catch (error) {
       if (error instanceof AuthenticationError) {
         throw new HttpErrors.Unauthorized(error.message);
-      
       } else {
         throw new HttpErrors.InternalServerError(error.message);
       }
     }
   }
 
-  async getDatabaseUser(): Promise<User> {
+  async getDatabaseAccount(): Promise<Account> {
     // Checks that the selected login field is actually a property of openid client object
     const loginField = APPLICATION_CONFIG().idp.loginField;
-    if (!this._userInfo.hasOwnProperty(loginField)) {
+    if (!this._accountInfo.hasOwnProperty(loginField)) {
       throw new LoggedError('Invalid login field for authenticated OpenId client');
     }
 
     // Checks that the person is registered in the db
-    const username = this._userInfo[loginField];
-    const users: User[] = await this._userService.get({ where: { username: username } });
+    const username = this._accountInfo[loginField];
+    const accounts: Account[] = await this._accountService.get({ where: { username: username } });
 
     // Case of multiplons, throws
-    if (users.length > 1) {
+    if (accounts.length > 1) {
       throw new LoggedError('Several users registered under the given login field');
     }
 
-    // Case where the user is not registered in the db
-    let user: User;
-    if (users.length > 0) {
-      user = users[0];
+    // Case where the account is not registered in the db
+    let account: Account;
+    if (accounts.length > 0) {
+      account = accounts[0];
     } else {
       const role: Role = await this._roleService.getById(APPLICATION_CONFIG().misc.default_role_id);
-      user = new User({
+      account = new Account({
         username: username,
         roles: [role]
       });
@@ -86,15 +84,14 @@ export class MeController extends BaseController {
     try {
       const attrProviderHelper = new AttributeProviderHelper();
       const attrProvider = attrProviderHelper.getProvider();
-      attrProvider.updateFromUserInfo(user, this._userInfo);
-      attrProvider.update(user);
-    
+      attrProvider.updateFromAccountInfo(account, this._accountInfo);
+      attrProvider.update(account);
     } catch (error) {
       throw new LoggedError(error.message);
     }
 
-    user = await this._userService.save(user);
+    account = await this._accountService.save(account);
 
-    return user;
+    return account;
   }
 }

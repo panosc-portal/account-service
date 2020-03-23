@@ -1,14 +1,14 @@
-import { User } from '../models';
+import { Account } from '../models';
 
-export function updateFromUserInfo(user: User, userInfo: object) {
-  user.username = userInfo['preferred_username'];
-  user.email = userInfo['email'];
-  user.uid = userInfo['uid'];
-  user.gid = userInfo['gid'];
-  user.homePath = userInfo['homeDirectory'];
-  user.facilityUserId = userInfo['employeeNumber'];
+export function updateFromAccountInfo(account: Account, accountInfo: object) {
+  account.username = accountInfo['preferred_username'];
+  account.email = accountInfo['email'];
+  account.uid = accountInfo['uid'];
+  account.gid = accountInfo['gid'];
+  account.homePath = accountInfo['homeDirectory'];
+  account.userId = accountInfo['employeeNumber'];
 }
 
-export function update(user: User) {
-  // To be implemented if updateFromUserInfo is not sufficient for feeding user
+export function update(account: Account) {
+  // To be implemented if updateFromAccountInfo is not sufficient for feeding user
 }
