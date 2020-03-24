@@ -74,8 +74,8 @@ export class Account {
   })
   @ManyToMany(type => Role, { eager: true, nullable: true })
   @JoinTable({
-    name: 'user_role',
-    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
+    name: 'account_role',
+    joinColumn: { name: 'account_id', referencedColumnName: 'id' },
     inverseJoinColumn: { name: 'role_id', referencedColumnName: 'id' }
   })
   roles: Role[];
