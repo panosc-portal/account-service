@@ -34,11 +34,11 @@ npm start
 
 ### Environment variables
 
-The following environment variables are used to configure the Account Service and can be places in a dotenv file:
+The following environment variables are used to configure the Account Service and can be placed in a dotenv file:
 
 | Environment variable | Default value | Usage |
 | ---- | ---- | ---- |
-| ACCOUNT_SERVICE_IDP | | URL to the OpenID discovery endpoint (eg https://server.com/.well-known/openid-configuration) 
+| ACCOUNT_SERVICE_IDP | | URL to the OpenID discovery endpoint (eg https://server.com/.well-known/openid-configuration) |
 | ACCOUNT_SERVICE_CLIENT_ID | | The Client ID as configured by the OpenID provider
 | ACCOUNT_SERVICE_LOGIN_FIELD | | The attribute name of the data returned by the IDP providing the login of the connected user
 | ACCOUNT_SERVICE_DATABASE_TYPE | | The type of database (eg postgres) |
