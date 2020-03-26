@@ -54,8 +54,3 @@ The following environment variables are used to configure the Account Service an
 | ACCOUNT_SERVICE_DEFAULT_ROLE_ID | | Default ID of the role to associate to users |
 | ACCOUNT_SERVICE_ATTRIBUTE_PROVIDER | | Absolute path to the attribute provider |
 
-
-
-Access explorer at: http://localhost:3000/api/v1/explorer/
-
-[![LoopBack](https://github.com/strongloop/loopback-next/raw/master/docs/site/imgs/branding/Powered-by-LoopBack-Badge-(blue)-@2x.png)](http://loopback.io/)
