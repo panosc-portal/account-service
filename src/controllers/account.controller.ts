@@ -17,6 +17,9 @@ export class AccountController extends BaseController {
 
   @get('/accounts', {
     summary: 'Gets a list of accounts',
+    tags: [
+      'Account'
+    ],
     responses: {
       '200': {
         description: 'Ok',
@@ -34,6 +37,9 @@ export class AccountController extends BaseController {
 
   @get('/accounts/{id}', {
     summary: 'Gets an account',
+    tags: [
+      'Account'
+    ],
     responses: {
       '200': {
         description: 'Ok',
@@ -47,6 +53,9 @@ export class AccountController extends BaseController {
 
   @post('/accounts/{accountId}/roles/{roleId}', {
     summary: 'Adds a role to an account',
+    tags: [
+      'Account'
+    ],
     responses: {
       '200': {
         description: 'Ok',
@@ -78,7 +87,10 @@ export class AccountController extends BaseController {
   }
 
   @del('/accounts/{accountId}/roles/{roleId}', {
-    summary: 'Deletes the role from a account',
+    summary: 'Deletes the role from an account',
+    tags: [
+      'Account'
+    ],
     responses: {
       '200': {
         description: 'Ok'
@@ -106,6 +118,9 @@ export class AccountController extends BaseController {
 
   @del('/accounts', {
     summary: 'Deletes all account',
+    tags: [
+      'Account'
+    ],
     responses: {
       '200': {
         description: 'Ok'
@@ -125,6 +140,9 @@ export class AccountController extends BaseController {
 
   @del('/accounts/{id}', {
     summary: 'Deletes an account',
+    tags: [
+      'Account'
+    ],
     responses: {
       '200': {
         description: 'Ok'
@@ -139,7 +157,10 @@ export class AccountController extends BaseController {
   }
 
   @post('/accounts', {
-    summary: 'Creates a Account',
+    summary: 'Creates an account',
+    tags: [
+      'Account'
+    ],
     responses: {
       '200': {
         description: 'Ok',
@@ -180,6 +201,9 @@ export class AccountController extends BaseController {
 
   @put('/accounts/{accountId}', {
     summary: 'Updates an account by a given identifier',
+    tags: [
+      'Account'
+    ],
     responses: {
       '200': {
         description: 'Ok',

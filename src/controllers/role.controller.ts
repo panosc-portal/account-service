@@ -13,6 +13,9 @@ export class RoleController extends BaseController {
 
   @get('/roles', {
     summary: 'Returns all possible roles',
+    tags: [
+      'Role'
+    ],
     responses: {
       '200': {
         description: 'Ok',
@@ -30,6 +33,9 @@ export class RoleController extends BaseController {
 
   @get('/roles/{id}', {
     summary: 'Gets a role',
+    tags: [
+      'Role'
+    ],
     responses: {
       '200': {
         description: 'Ok',
@@ -47,6 +53,9 @@ export class RoleController extends BaseController {
 
   @post('/roles', {
     summary: 'Creates a Role',
+    tags: [
+      'Role'
+    ],
     responses: {
       '200': {
         description: 'Ok',
@@ -67,6 +76,9 @@ export class RoleController extends BaseController {
 
   @put('/roles/{roleId}', {
     summary: 'Update a role by a given identifier',
+    tags: [
+      'Role'
+    ],
     responses: {
       '200': {
         description: 'Ok',
@@ -100,6 +112,9 @@ export class RoleController extends BaseController {
 
   @del('/roles/{id}', {
     summary: 'Deletes a Role',
+    tags: [
+      'Role'
+    ],
     responses: {
       '200': {
         description: 'Ok'
@@ -115,6 +130,9 @@ export class RoleController extends BaseController {
 
   @del('/roles', {
     summary: 'Deletes all Roles',
+    tags: [
+      'Role'
+    ],
     responses: {
       '200': {
         description: 'Ok'

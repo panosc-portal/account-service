@@ -20,6 +20,9 @@ export class MeController extends BaseController {
 
   @get('/me', {
     summary: 'Authenticates a JWT token and returns an Account object with its associated Role',
+    tags: [
+      'Me'
+    ],
     responses: {
       '200': {
         description: 'Ok',
