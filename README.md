@@ -48,7 +48,7 @@ The following environment variables are used to configure the Account Service an
 | ACCOUNT_SERVICE_DATABASE_SCHEMA | | The database schema |
 | ACCOUNT_SERVICE_DATABASE_USERNAME | | The database username |
 | ACCOUNT_SERVICE_DATABASE_PASSWORD | | The database password |
-| ACCOUNT_SERVICE_DATABASE_SYNCHRONIZE | true | Automatically generated the database structure |
+| ACCOUNT_SERVICE_DATABASE_SYNCHRONIZE | false | Automatically generated the database structure |
 | ACCOUNT_SERVICE_DATABASE_LOGGING | false | Provides detailed SQL logging |
 | ACCOUNT_SERVICE_LOG_LEVEL | 'info' | Application logging level |
 | ACCOUNT_SERVICE_DEFAULT_ROLE_ID | | Default ID of the role to associate to users |
