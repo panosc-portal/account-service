@@ -20,15 +20,15 @@ INSERT INTO account
 VALUES
     (3, 1003, 'smith', 1002, 2002, 'ben.smith@mail.net', '/home/smith');
 
-INSERT INTO user_role
-    (user_id, role_id)
+INSERT INTO account_role
+    (account_id, role_id)
 VALUES
     (1, 1);
-INSERT INTO user_role
-    (user_id, role_id)
+INSERT INTO account_role
+    (account_id, role_id)
 VALUES
     (2, 2);
-INSERT INTO user_role
-    (user_id, role_id)
+INSERT INTO account_role
+    (account_id, role_id)
 VALUES
     (3, 2);
