@@ -1,14 +1,11 @@
+import { UserinfoResponse } from 'openid-client';
 import { Account } from '../models';
 
-export function updateFromAccountInfo(account: Account, accountInfo: object) {
+export function setAccountAttributes(account: Account, accountInfo: UserinfoResponse) {
   account.username = accountInfo['preferred_username'];
   account.email = accountInfo['email'];
-  account.uid = accountInfo['uid'];
-  account.gid = accountInfo['gid'];
-  account.homePath = accountInfo['homeDirectory'];
-  account.userId = accountInfo['employeeNumber'];
+  account.uid = accountInfo['uid'] as number;
+  account.gid = accountInfo['gid'] as number;
+  account.homePath = accountInfo['homeDirectory'] as string;
 }
 
-export function update(account: Account) {
-  // To be implemented if updateFromAccountInfo is not sufficient for feeding user
-}

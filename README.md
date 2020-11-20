@@ -51,6 +51,5 @@ The following environment variables are used to configure the Account Service an
 | ACCOUNT_SERVICE_DATABASE_SYNCHRONIZE | false | Automatically generated the database structure |
 | ACCOUNT_SERVICE_DATABASE_LOGGING | false | Provides detailed SQL logging |
 | ACCOUNT_SERVICE_LOG_LEVEL | 'info' | Application logging level |
-| ACCOUNT_SERVICE_DEFAULT_ROLE_ID | | Default ID of the role to associate to users |
 | ACCOUNT_SERVICE_ATTRIBUTE_PROVIDER | | Absolute path to the attribute provider |
 

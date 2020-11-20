@@ -1,8 +1,11 @@
 import { APPLICATION_CONFIG } from '../application-config';
 import { IAttributeProvider } from '../interfaces';
 import { LoggedError } from '.';
+import { UserinfoResponse } from 'openid-client';
+import { Account } from '../models';
 
-export class AttributeProviderHelper {
+export class AttributeProviderHelper implements IAttributeProvider {
+
   private _attributeProvider: IAttributeProvider = null;
 
   private _loadProvider() {
@@ -27,16 +30,12 @@ export class AttributeProviderHelper {
       throw new LoggedError('The attribute provider is null');
     }
 
-    if (!attributeProvider.updateFromAccountInfo) {
-      throw new LoggedError('Uncomplete IAttributeProvider interface: missing updateFromAccountInfo method');
-    }
-
-    if (!attributeProvider.update) {
-      throw new LoggedError('Uncomplete IAttributeProvider interface: missing update method');
+    if (!attributeProvider.setAccountAttributes) {
+      throw new LoggedError('Incomplete IAttributeProvider interface: missing setAccountAttributes method');
     }
   }
 
-  getProvider() {
+  getProvider(): IAttributeProvider {
     // If already one available just returns
     if (this._attributeProvider) {
       return this._attributeProvider;
@@ -46,5 +45,11 @@ export class AttributeProviderHelper {
     this._loadProvider();
 
     return this._attributeProvider;
+  }
+
+  setAccountAttributes(account: Account, accountInfo?: UserinfoResponse) {
+    const concreteProvider = this.getProvider();
+
+    concreteProvider.setAccountAttributes(account, accountInfo);
   }
 }

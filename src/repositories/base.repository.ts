@@ -1,5 +1,5 @@
 import { TypeORMDataSource } from '../datasources';
-import { Repository, ObjectType, FindManyOptions } from 'typeorm';
+import { Repository, ObjectType, FindManyOptions, FindOneOptions } from 'typeorm';
 import { Where, Command, NamedParameters, PositionalParameters, AnyObject } from '@loopback/repository';
 
 interface ParamterizedClause {
@@ -37,6 +37,13 @@ export class BaseRepository<T, ID> {
     await this.init();
 
     const result = await this._repository.find(options);
+    return result;
+  }
+
+  async findOne(options?: FindOneOptions<T>): Promise<T> {
+    await this.init();
+
+    const result = await this._repository.findOne(options);
     return result;
   }
 
