@@ -19,11 +19,10 @@
             "${workspaceFolder}/dist/__tests__"
         ],
         "env": {
-            "NODE_ENV": "test",
             "ACCOUNT_SERVICE_DATABASE_TYPE": "sqlite",
             "ACCOUNT_SERVICE_DATABASE_NAME": ":memory:",
             "ACCOUNT_SERVICE_DATABASE_SYNCHRONIZE": "true",
-            "ACCOUNT_SERVICE_DATABASE_LOGGING": "true",
+            "ACCOUNT_SERVICE_DATABASE_LOGGING": "false",
             "ACCOUNT_SERVICE_LOG_LEVEL": "error",
             "ACCOUNT_SERVICE_TOKEN_VALID_DURATION_S": "10"
         },
@@ -46,11 +45,10 @@
             "${workspaceFolder}/dist/__tests__/acceptance/controllers/role.controller.acceptance.js"
         ],
         "env": {
-            "NODE_ENV": "test",
             "ACCOUNT_SERVICE_DATABASE_TYPE": "sqlite",
             "ACCOUNT_SERVICE_DATABASE_NAME": ":memory:",
             "ACCOUNT_SERVICE_DATABASE_SYNCHRONIZE": "true",
-            "ACCOUNT_SERVICE_DATABASE_LOGGING": "true",
+            "ACCOUNT_SERVICE_DATABASE_LOGGING": "false",
             "ACCOUNT_SERVICE_LOG_LEVEL": "error",
             "ACCOUNT_SERVICE_TOKEN_VALID_DURATION_S": "10"
         },
@@ -67,16 +65,15 @@
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/index.js",
       "env": {
-        "NODE_ENV": "dev",
         "ACCOUNT_SERVICE_DATABASE_TYPE": "postgres",
         "ACCOUNT_SERVICE_DATABASE_PORT": "5432",
         "ACCOUNT_SERVICE_DATABASE_HOST": "localhost",
         "ACCOUNT_SERVICE_DATABASE_USERNAME": "panosc",
         "ACCOUNT_SERVICE_DATABASE_PASSWORD": "panosc",
         "ACCOUNT_SERVICE_DATABASE_NAME": "panosc",
-        "ACCOUNT_SERVICE_DATABASE_SCHEMA": "panosc",
+        "ACCOUNT_SERVICE_DATABASE_SCHEMA": "account-service",
         "ACCOUNT_SERVICE_DATABASE_SYNCHRONIZE": "true",
-        "ACCOUNT_SERVICE_DATABASE_LOGGING": "true",
+        "ACCOUNT_SERVICE_DATABASE_LOGGING": "false",
         "ACCOUNT_SERVICE_LOG_LEVEL": "debug"
       },
       "preLaunchTask": "npm: build",

@@ -3,7 +3,7 @@ import { AccountServiceApplication } from '../../..';
 import { setupApplication } from '../../helpers/application.helper';
 import { givenInitialisedDatabase } from '../../helpers/database.helper';
 import { TypeORMDataSource } from '../../../datasources';
-import { AccountDto, AccountCreatorDto, AccountUpdatorDto, RoleDto } from '../../../controllers';
+import { AccountDto, AccountCreatorDto, AccountUpdatorDto } from '../../../controllers';
 
 describe('AccountController', () => {
   let app: AccountServiceApplication;
@@ -82,9 +82,6 @@ describe('AccountController', () => {
   });
 
   it('invokes PUT /api/v1/accounts/{id}', async () => {
-    const resRole = await client.get('/api/v1/roles/2').expect(200);
-    const role = resRole.body as RoleDto;
-
     const res = await client.get('/api/v1/accounts/1').expect(200);
     const account = res.body as AccountDto;
     expect(account || null).to.not.be.null();
@@ -95,7 +92,6 @@ describe('AccountController', () => {
     const newEmail = 'bobby@mail.net';
     const newHomedir = '/home/bobby';
     const newActive = false;
-    const newRole = [role.id];
 
     const updatedAccount = new AccountUpdatorDto({
       id: account.id,
@@ -106,7 +102,7 @@ describe('AccountController', () => {
       email: newEmail,
       homePath: newHomedir,
       active: newActive,
-      roles: newRole
+      roles: [2]
     });
 
     const res1 = await client
