@@ -23,7 +23,7 @@ export class Account {
     type: 'string',
     required: true
   })
-  @Column({ length: 250, nullable: false })
+  @Column({ length: 250, nullable: false, unique: true })
   username: string;
 
   @property({
