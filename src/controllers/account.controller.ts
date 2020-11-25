@@ -5,7 +5,7 @@ import { BaseController } from './base.controller';
 import { AccountCreatorDto, AccountUpdatorDto } from './dto';
 import { Account, Role } from '../models';
 import { AccountService, AuthenticationService, RoleService } from '../services';
-import { AuthenticationError, LoggedError } from '../utils';
+import { AuthenticationError, LoggedError, logger } from '../utils';
 
 export class AccountController extends BaseController {
   constructor(
@@ -33,6 +33,8 @@ export class AccountController extends BaseController {
 
       // Get account from the account service
       let account = await this._accountService.getAccountForUsername(userInfo);
+
+      logger.debug(`Successfully authenticated user: ${account.username} (${account.userId})`);
 
       return account;
 
