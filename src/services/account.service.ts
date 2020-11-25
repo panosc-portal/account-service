@@ -5,7 +5,7 @@ import { repository } from '@loopback/repository';
 import { BaseService } from './base.service';
 import { AccountAttributeProviderHelper, IAccountAttributeProvider } from './account-attribute-provider-helper';
 import { APPLICATION_CONFIG } from '../application-config';
-import { logger } from '../utils';
+import { AuthenticationError, logger } from '../utils';
 
 @bind({ scope: BindingScope.SINGLETON })
 @lifeCycleObserver('service')
@@ -40,7 +40,11 @@ export class AccountService extends BaseService<Account, AccountRepository> impl
 
     // Update account atributes from the provider
     this._accountAttributeProvider.setAccountAttributes(account, userInfo)
-          
+
+    if (!account.isValid()) {
+      throw new AuthenticationError(`Account does not have valid attributes`);
+    }
+
     account = await this.save(account);
 
     return account;

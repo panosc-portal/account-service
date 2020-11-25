@@ -16,7 +16,7 @@ export class Account {
     type: 'number',
     required: true
   })
-  @Column({ name: 'user_id', type: 'integer' })
+  @Column({ name: 'user_id', type: 'integer', nullable: false })
   userId: number;
 
   @property({
@@ -82,5 +82,9 @@ export class Account {
 
   constructor(data?: Partial<Account>) {
     Object.assign(this, data);
+  }
+
+  isValid(): boolean {
+    return this.userId != null && this.username != null && this.uid != null && this.gid != null && this.homePath != null;
   }
 }

@@ -8,6 +8,15 @@ export class OpenIDDataSource implements LifeCycleObserver {
 
   private _client: Client;
 
+  get client(): Promise<Client> {
+    if (this._client == null) {
+      return this.createClient();
+    }
+    return new Promise<Client>((resolve) => {
+      resolve(this._client);
+    });
+  }
+
   constructor() {
   }
 
@@ -15,6 +24,10 @@ export class OpenIDDataSource implements LifeCycleObserver {
    * Create client for the OpenID connect provider
    */
   async start(): Promise<void> {
+    if (process.env.NODE_ENV === 'dev') {
+      return;
+    }
+
     logger.info('Initialising openid provider');
     this._client = await this.createClient();
   }
@@ -39,8 +52,8 @@ export class OpenIDDataSource implements LifeCycleObserver {
 
   async authenticate(token: string): Promise<UserinfoResponse> {
     try {
-      // Authenticate to OpenId first
-      const userInfo = await this._client.userinfo(token);
+      const client = await this.client;
+      const userInfo = await client.userinfo(token);
       return userInfo;
     
     } catch (error) {
