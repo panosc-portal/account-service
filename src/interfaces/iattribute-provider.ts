@@ -1,6 +1,5 @@
-import { UserinfoResponse } from 'openid-client';
-import { Account } from '../models';
+import { Account, UserInfo } from '../models';
 
 export interface IAttributeProvider {
-  setAccountAttributes(account: Account, accountInfo?: UserinfoResponse): any;
+  setAccountAttributes(account: Account, userInfo?: UserInfo): any;
 }

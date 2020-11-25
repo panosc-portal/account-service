@@ -145,16 +145,6 @@ describe('AccountController', () => {
     expect(account.active).to.equal(true);
   });
 
-  it('invokes DELETE /accounts/', async () => {
-    await client.delete('/api/v1/accounts').expect(200);
-
-    const res = await client.get('/api/v1/accounts').expect(200);
-
-    const accounts = res.body as AccountDto[];
-
-    expect(accounts.length).to.equal(0);
-  });
-
   it('invokes DELETE /accounts/{id}', async () => {
     await client.delete('/api/v1/accounts/1').expect(200);
 

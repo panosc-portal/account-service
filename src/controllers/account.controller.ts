@@ -1,18 +1,49 @@
 import { inject } from '@loopback/core';
-import { del, get, getModelSchemaRef, param, post, put, requestBody } from '@loopback/rest';
+import { del, get, getModelSchemaRef, HttpErrors, param, post, put, requestBody } from '@loopback/rest';
 
 import { BaseController } from './base.controller';
 import { AccountCreatorDto, AccountUpdatorDto } from './dto';
 import { Account, Role } from '../models';
-import { AccountService, RoleService } from '../services';
-import { LoggedError } from '../utils';
+import { AccountService, AuthenticationService, RoleService } from '../services';
+import { AuthenticationError, LoggedError } from '../utils';
 
 export class AccountController extends BaseController {
   constructor(
     @inject('services.AccountService') private _accountService: AccountService,
-    @inject('services.RoleService') private _roleService: RoleService
-  ) {
-    super();
+    @inject('services.RoleService') private _roleService: RoleService,
+    @inject('services.AuthenticationService') private _authenticationService: AuthenticationService) {
+      super();
+  }
+
+  @get('/account', {
+    summary: 'Authenticates a JWT token and returns an Account object with its associated Role',
+    tags: [
+      'Account'
+    ],
+    responses: {
+      '200': {
+        description: 'Ok',
+        content: { 'application/json': { schema: getModelSchemaRef(Account) } }
+      }
+    }
+  })
+  async account(@param.header.string('access_token') accessToken: string): Promise<Account> {
+    try {
+      const userInfo = await this._authenticationService.authenticate(accessToken);
+
+      // Get account from the account service
+      let account = await this._accountService.getAccountForUsername(userInfo);
+
+      return account;
+
+    } catch (error) {
+      if (error instanceof AuthenticationError) {
+        throw new HttpErrors.Unauthorized(error.message);
+        
+      } else {
+        throw new HttpErrors.InternalServerError(error.message);
+      }
+    }
   }
 
   @get('/accounts', {
@@ -114,28 +145,6 @@ export class AccountController extends BaseController {
     this._accountService.save(account);
 
     return account;
-  }
-
-  @del('/accounts', {
-    summary: 'Deletes all account',
-    tags: [
-      'Account'
-    ],
-    responses: {
-      '200': {
-        description: 'Ok'
-      }
-    }
-  })
-  async deleteAllAccount() {
-    const accounts = await this._accountService.getAll();
-
-    let success = true;
-    for (const account of accounts) {
-      success = success && (await this._accountService.delete(account));
-    }
-
-    return success;
   }
 
   @del('/accounts/{id}', {
@@ -254,4 +263,5 @@ export class AccountController extends BaseController {
 
     return this._accountService.save(updatedAccount);
   }
+  
 }

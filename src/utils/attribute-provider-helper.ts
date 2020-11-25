@@ -1,8 +1,7 @@
 import { APPLICATION_CONFIG } from '../application-config';
 import { IAttributeProvider } from '../interfaces';
 import { LoggedError } from '.';
-import { UserinfoResponse } from 'openid-client';
-import { Account } from '../models';
+import { Account, UserInfo } from '../models';
 
 export class AttributeProviderHelper implements IAttributeProvider {
 
@@ -47,9 +46,9 @@ export class AttributeProviderHelper implements IAttributeProvider {
     return this._attributeProvider;
   }
 
-  setAccountAttributes(account: Account, accountInfo?: UserinfoResponse) {
+  setAccountAttributes(account: Account, userInfo?: UserInfo) {
     const concreteProvider = this.getProvider();
 
-    concreteProvider.setAccountAttributes(account, accountInfo);
+    concreteProvider.setAccountAttributes(account, userInfo);
   }
 }
