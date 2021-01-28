@@ -24,8 +24,8 @@ Further documentation and the design details can be found at [PaNOSC Portal Acco
 
 ## Installation
 ```
- npm install
- ```
+npm install
+```
 
 ## Run
 ```
