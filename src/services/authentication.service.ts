@@ -7,7 +7,7 @@ import { AuthenticationError } from '../utils';
 @bind({ scope: BindingScope.SINGLETON })
 export class AuthenticationService {
 
-  constructor(@inject('datasources.typeorm') private _openIdDataSource: OpenIDDataSource) {
+  constructor(@inject('datasources.open-id') private _openIdDataSource: OpenIDDataSource) {
   }
 
   async authenticate(accessToken: string | string[]): Promise<UserInfo> {

@@ -1,10 +1,11 @@
 import { APPLICATION_CONFIG } from '../application-config';
-import { Client, Issuer, UserinfoResponse } from 'openid-client';
+import { Client, Issuer, UserinfoResponse, custom } from 'openid-client';
 import { LifeCycleObserver, lifeCycleObserver } from '@loopback/core';
 import { AuthenticationError, logger } from '../utils';
 
 @lifeCycleObserver('datasource')
 export class OpenIDDataSource implements LifeCycleObserver {
+  static dataSourceName = 'open-id';
 
   private _client: Client;
 
