@@ -149,24 +149,6 @@ export class AccountController extends BaseController {
     return account;
   }
 
-  @del('/accounts/{id}', {
-    summary: 'Deletes an account',
-    tags: [
-      'Account'
-    ],
-    responses: {
-      '200': {
-        description: 'Ok'
-      }
-    }
-  })
-  async deleteAccount(@param.path.number('id') id: number) {
-    const account = await this._accountService.getById(id);
-    this.throwNotFoundIfNull(account, 'Account with given id does not exist');
-
-    return this._accountService.delete(account);
-  }
-
   @post('/accounts', {
     summary: 'Creates an account',
     tags: [

@@ -145,27 +145,4 @@ describe('AccountController', () => {
     expect(account.active).to.equal(true);
   });
 
-  it('invokes DELETE /accounts/{id}', async () => {
-    await client.delete('/api/v1/accounts/1').expect(200);
-
-    const res = await client.get('/api/v1/accounts').expect(200);
-
-    const accounts = res.body as AccountDto[];
-
-    expect(accounts || null).to.not.be.null();
-
-    expect(accounts.length).to.equal(2);
-
-    expect(accounts[0].id).to.equal(2);
-    expect(accounts[0].username).to.equal('murphy');
-    expect(accounts[0].uid).to.equal(1001);
-    expect(accounts[0].gid).to.equal(2001);
-    expect(accounts[0].active).to.equal(true);
-    expect(accounts[0].email).to.equal('jane.murphy@mail.net');
-    expect(accounts[0].homePath).to.equal('/home/murphy');
-
-    expect(accounts[0].roles[0].id).to.equal(2);
-    expect(accounts[0].roles[0].name).to.equal('user');
-    expect(accounts[0].roles[0].description).to.equal('normal user role');
-  });
 });
