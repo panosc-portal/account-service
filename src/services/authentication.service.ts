@@ -27,9 +27,6 @@ export class AuthenticationService {
     }
 
     const userInfo = new UserInfo(userinfoResponse);
-    if (!userInfo.isValid) {
-      throw new AuthenticationError('Invalid username returned from the IDP');
-    }
 
     return userInfo;
   }

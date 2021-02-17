@@ -1,10 +1,23 @@
-const setAccountAttributes = function(account, userInfo) {
-  account.email = userInfo.get('email');
-  account.uid = userInfo.get('uid');
-  account.gid = userInfo.get('gid');
-  account.homePath = userInfo.get('homeDirectory');
+const getUserId = function (userInfo) {
+  return userInfo.get('the_userid_claim')
 }
 
+const getUID = function (userInfo) {
+  return userInfo.get('the_uid_claim')
+}
+
+const getGID = function (userInfo) {
+  return userInfo.get('the_gid_claim')
+}
+
+const getHomePath = function (userInfo) {
+  return userInfo.get('the_home_directory_claim')
+}
+
+
 module.exports = {
-  setAccountAttributes: setAccountAttributes
+  getUserId: getUserId,
+  getUID: getUID,
+  getGID: getGID,
+  getHomePath: getHomePath
 };

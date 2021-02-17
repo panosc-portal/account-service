@@ -1,45 +1,38 @@
-import { bind, BindingScope, LifeCycleObserver, lifeCycleObserver } from '@loopback/core';
+import { bind, BindingScope, inject } from '@loopback/core';
 import { Account, UserInfo } from '../models';
 import { AccountRepository } from '../repositories';
 import { repository } from '@loopback/repository';
 import { BaseService } from './base.service';
-import { AccountAttributeProviderHelper, IAccountAttributeProvider } from './account-attribute-provider-helper';
-import { APPLICATION_CONFIG } from '../application-config';
-import { AuthenticationError, logger } from '../utils';
+import { AuthenticationError } from '../utils';
+import { AttributeService } from './attribute.service';
 
 @bind({ scope: BindingScope.SINGLETON })
-@lifeCycleObserver('service')
-export class AccountService extends BaseService<Account, AccountRepository> implements LifeCycleObserver {
+export class AccountService extends BaseService<Account, AccountRepository> {
 
-  private _accountAttributeProvider: IAccountAttributeProvider;
-
-  constructor(@repository(AccountRepository) repo: AccountRepository) {
+  constructor(@repository(AccountRepository) repo: AccountRepository,
+    @inject('services.AttributeService') private _attributeService: AttributeService) {
     super(repo);
   }
-   
-  start(): void {
-    const attributeProviderPath = APPLICATION_CONFIG().misc.attribute_provider;
-    const accountAttributeProviderHelper = new AccountAttributeProviderHelper();
 
-    this._accountAttributeProvider = accountAttributeProviderHelper.getAttributeProvider(attributeProviderPath);
-    if (this._accountAttributeProvider == null) {
-      process.exit();
-    } else {
-      logger.info(`Loaded account attribute provider from path '${attributeProviderPath}'`);
+  async getAccount(userInfo: UserInfo): Promise<Account> {
+    const username = this._attributeService.getUsername(userInfo);
+    if (username == null) {
+      throw new AuthenticationError(`Unable to obtain username`);
     }
-  }
 
-  async getAccountForUsername(userInfo: UserInfo): Promise<Account> {
-    let account: Account = await this._repository.getAccountForUsername(userInfo.username);
+    let account: Account = await this._repository.getAccountForUsername(username);
 
     if (account == null) {
       account = new Account({
-        username: userInfo.username
+        username: username
       });
     }
 
-    // Update account atributes from the provider
-    this._accountAttributeProvider.setAccountAttributes(account, userInfo)
+    // Update account atributes
+    account.userId = this._attributeService.getUserId(userInfo);
+    account.uid = this._attributeService.getUID(userInfo);
+    account.gid = this._attributeService.getGID(userInfo);
+    account.homePath = this._attributeService.getHomePath(userInfo);
 
     if (!account.isValid()) {
       throw new AuthenticationError(`Account does not have valid attributes`);

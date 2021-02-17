@@ -5,7 +5,7 @@ import { logger } from '../../utils';
 import { EntityManager } from 'typeorm';
 
 async function emptyDatabase(entityManager: EntityManager) {
-  const tables = ['role', 'account', 'account_role'];
+  const tables = ['role', 'account', 'users', 'user_role', 'employer'];
   for (const table of tables) {
     try {
       await entityManager.query(`delete from ${table};`);

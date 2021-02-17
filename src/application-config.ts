@@ -18,12 +18,9 @@ export class ApplicationConfig {
   idp: {
     url: string;
     clientId: string;
-    loginField: string;
   };
 
-  misc: {
-    attribute_provider: string;
-  };
+  attributeProviderPath: string;
 
   constructor(data?: Partial<ApplicationConfig>) {
     Object.assign(this, data);
@@ -52,11 +49,8 @@ export function APPLICATION_CONFIG(): ApplicationConfig {
       idp: {
         url: process.env.ACCOUNT_SERVICE_IDP,
         clientId: process.env.ACCOUNT_SERVICE_CLIENT_ID,
-        loginField: process.env.ACCOUNT_SERVICE_LOGIN_FIELD
       },
-      misc: {
-        attribute_provider: process.env.ACCOUNT_SERVICE_ATTRIBUTE_PROVIDER
-      }
+      attributeProviderPath: process.env.ACCOUNT_SERVICE_ATTRIBUTE_PROVIDER
     };
   }
 
