@@ -9,6 +9,8 @@ INSERT INTO users (id, first_name, last_name, email, activated, last_seen_at, in
 VALUES (1002, 'Jane', 'Murphy', 'jane.murphy@mail.net', true, '09-02-2021', 2);
 INSERT INTO users (id, first_name, last_name, email, activated, last_seen_at, instance_quota)
 VALUES (1003, 'Ben', 'Smith', 'ben.smith@mail.net', true, '10-02-2021', 2);
+INSERT INTO users (id, first_name, last_name, email, activated, last_seen_at, instance_quota)
+VALUES (1004, 'John', 'Murlow', 'john.murlow@mail.net', true, '09-02-2021', 2);
 
 INSERT INTO account (id, user_id, username, uid, gid, home_path)
 VALUES (1, 1001, 'doe', 1000, 2000, '/home/doe');

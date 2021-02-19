@@ -28,7 +28,7 @@ describe('UserController', () => {
     const users = res.body as User[];
     expect(users || null).to.not.be.null();
 
-    expect(users.length).to.equal(3);
+    expect(users.length).to.equal(4);
     users.forEach(user => {
       expect(user.id || null).to.not.be.null();
     });

@@ -39,3 +39,7 @@ export async function givenInitialisedDatabase(datasource: TypeORMDataSource) {
     }
   }
 }
+
+export async function closeTestDatabase() {
+  await testDataSource.stop();
+}

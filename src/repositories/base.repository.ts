@@ -1,6 +1,8 @@
 import { TypeORMDataSource } from '../datasources';
 import { Repository, ObjectType, FindManyOptions, FindOneOptions } from 'typeorm';
 import { Where, Command, NamedParameters, PositionalParameters, AnyObject } from '@loopback/repository';
+import { Query } from '../models';
+import { QueryParser } from './query/query-parser';
 
 interface ParamterizedClause {
   clause: string;
@@ -88,6 +90,17 @@ export class BaseRepository<T, ID> {
     await this.init();
     const result = await this._repository.query(<string>command, <any[]>parameters);
     return result;
+  }
+
+  async executeSearchQuery(query: Query): Promise<T[]> {
+    await this.init();
+    const queryParser = new QueryParser(query, (alias) => {
+      return this._repository.createQueryBuilder(alias)
+    });
+
+    const queryBuilder = queryParser.parse();
+    
+    return queryBuilder.getMany();
   }
 
   /**
