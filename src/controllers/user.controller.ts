@@ -1,8 +1,8 @@
 import { inject } from '@loopback/core';
-import { del, get, getModelSchemaRef, param, post } from '@loopback/rest';
+import { del, get, getModelSchemaRef, param, post, requestBody } from '@loopback/rest';
 
 import { BaseController } from './base.controller';
-import { User } from '../models';
+import { Paginated, Query, User } from '../models';
 import { RoleService, UserService } from '../services';
 
 export class UserController extends BaseController {
@@ -12,7 +12,7 @@ export class UserController extends BaseController {
       super();
   }
 
-  @get('/users', {
+  @post('/users/search', {
     summary: 'Gets a list of users',
     tags: [
       'User'
@@ -28,8 +28,8 @@ export class UserController extends BaseController {
       }
     }
   })
-  async getAllUsers(): Promise<User[]> {
-    return await this._userService.getAll();
+  async searchForUsers(@requestBody() query: Query): Promise<Paginated<User>> {
+    return await this._userService.executeSearchQuery(query);
   }
 
   @get('/users/{id}', {

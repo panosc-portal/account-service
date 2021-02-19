@@ -1,9 +1,14 @@
 import { Where, Command, NamedParameters, PositionalParameters, AnyObject } from '@loopback/repository';
 import { BaseRepository } from '../repositories';
 import { FindManyOptions } from 'typeorm';
+import { Paginated, Query } from '../models';
 
 export class BaseService<T extends { id: number }, R extends BaseRepository<T, number>> {
   constructor(protected _repository: R) {}
+
+  executeSearchQuery(query: Query): Promise<Paginated<T>> {
+    return this._repository.executeSearchQuery(query);
+  }
 
   getAll(): Promise<T[]> {
     return this._repository.find();

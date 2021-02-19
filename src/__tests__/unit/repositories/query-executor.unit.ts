@@ -3,7 +3,7 @@ import { givenInitialisedTestDatabase } from '../../helpers/database.helper';
 import { createTestApplicationContext, TestApplicationContext } from '../../helpers/context.helper';
 import { Query } from '../../../models';
 
-describe('PlanRepository', () => {
+describe('QueryExecutor', () => {
   let context: TestApplicationContext;
 
   before('get context', async () => {
@@ -20,9 +20,10 @@ describe('PlanRepository', () => {
       ]
     }
 
-    const users = await context.userRepository.executeSearchQuery(query);
-    expect(users.length).to.equal(1);
-    expect(users[0].lastName).to.equal('Murphy');
+    const paginatedUsers = await context.userRepository.executeSearchQuery(query);
+    expect(paginatedUsers.meta.count).to.equal(1);
+    expect(paginatedUsers.data.length).to.equal(1);
+    expect(paginatedUsers.data[0].lastName).to.equal('Murphy');
   });
 
 
@@ -34,8 +35,9 @@ describe('PlanRepository', () => {
       ]
     }
 
-    const users = await context.userRepository.executeSearchQuery(query);
-    expect(users.length).to.equal(2);
+    const paginatedUsers = await context.userRepository.executeSearchQuery(query);
+    expect(paginatedUsers.meta.count).to.equal(2);
+    expect(paginatedUsers.data.length).to.equal(2);
   });
 
   it('searches users by lowercase last name like', async () => {
@@ -46,8 +48,9 @@ describe('PlanRepository', () => {
       ]
     }
 
-    const users = await context.userRepository.executeSearchQuery(query);
-    expect(users.length).to.equal(2);
+    const paginatedUsers = await context.userRepository.executeSearchQuery(query);
+    expect(paginatedUsers.meta.count).to.equal(2);
+    expect(paginatedUsers.data.length).to.equal(2);
   });
 
   it('searches users by name and id', async () => {
@@ -59,8 +62,9 @@ describe('PlanRepository', () => {
       ]
     }
 
-    const users = await context.userRepository.executeSearchQuery(query);
-    expect(users.length).to.equal(1);
+    const paginatedUsers = await context.userRepository.executeSearchQuery(query);
+    expect(paginatedUsers.meta.count).to.equal(1);
+    expect(paginatedUsers.data.length).to.equal(1);
   });
 
   it('searches users by role equal', async () => {
@@ -74,8 +78,9 @@ describe('PlanRepository', () => {
       ]
     }
 
-    const users = await context.userRepository.executeSearchQuery(query);
-    expect(users.length).to.equal(2);
+    const paginatedUsers = await context.userRepository.executeSearchQuery(query);
+    expect(paginatedUsers.meta.count).to.equal(2);
+    expect(paginatedUsers.data.length).to.equal(2);
   });
 
   it('orders by id desc', async () => {
@@ -86,9 +91,28 @@ describe('PlanRepository', () => {
       ]
     }
 
-    const users = await context.userRepository.executeSearchQuery(query);
-    expect(users.length).to.equal(4);
-    expect(users[0].id).to.equal(1004);
+    const paginatedUsers = await context.userRepository.executeSearchQuery(query);
+    expect(paginatedUsers.meta.count).to.equal(4);
+    expect(paginatedUsers.data.length).to.equal(4);
+    expect(paginatedUsers.data[0].id).to.equal(1004);
+  });
+
+  it('paginates', async () => {
+    const query: Query = {
+      alias: 'user',
+      orderBy: [
+        {alias: 'user.id', direction: 'DESC'}
+      ],
+      pagination: {
+        limit: 1, 
+        offset: 1
+      }
+    }
+
+    const paginatedUsers = await context.userRepository.executeSearchQuery(query);
+    expect(paginatedUsers.meta.count).to.equal(4);
+    expect(paginatedUsers.data.length).to.equal(1);
+    expect(paginatedUsers.data[0].id).to.equal(1003);
   });
 
 

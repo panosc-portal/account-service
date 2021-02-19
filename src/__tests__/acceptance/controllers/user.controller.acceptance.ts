@@ -3,7 +3,7 @@ import { AccountServiceApplication } from '../../..';
 import { setupApplication } from '../../helpers/application.helper';
 import { givenInitialisedDatabase } from '../../helpers/database.helper';
 import { TypeORMDataSource } from '../../../datasources';
-import { User } from '../../../models';
+import { Paginated, Query, User } from '../../../models';
 
 describe('UserController', () => {
   let app: AccountServiceApplication;
@@ -22,14 +22,16 @@ describe('UserController', () => {
     return givenInitialisedDatabase(datasource);
   });
 
-  it('invokes GET /users', async () => {
-    const res = await client.get('/api/users').expect(200);
+  it('invokes GET /users/search', async () => {
+    const query: Query = {
+    }
+    const res = await client.post('/api/users/search').send(query).expect(200);
+    const paginatedUser = res.body as Paginated<User>;
+    expect(paginatedUser || null).to.not.be.null();
 
-    const users = res.body as User[];
-    expect(users || null).to.not.be.null();
-
-    expect(users.length).to.equal(4);
-    users.forEach(user => {
+    expect(paginatedUser.meta.count).to.equal(4);
+    expect(paginatedUser.data.length).to.equal(4);
+    paginatedUser.data.forEach(user => {
       expect(user.id || null).to.not.be.null();
     });
   });

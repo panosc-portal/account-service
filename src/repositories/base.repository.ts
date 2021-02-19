@@ -1,8 +1,8 @@
 import { TypeORMDataSource } from '../datasources';
 import { Repository, ObjectType, FindManyOptions, FindOneOptions } from 'typeorm';
 import { Where, Command, NamedParameters, PositionalParameters, AnyObject } from '@loopback/repository';
-import { Query } from '../models';
-import { QueryParser } from './query/query-parser';
+import { Paginated, Query } from '../models';
+import { QueryExecutor } from './query/query-executor';
 
 interface ParamterizedClause {
   clause: string;
@@ -92,15 +92,14 @@ export class BaseRepository<T, ID> {
     return result;
   }
 
-  async executeSearchQuery(query: Query): Promise<T[]> {
+  async executeSearchQuery(query: Query): Promise<Paginated<T>> {
     await this.init();
-    const queryParser = new QueryParser(query, (alias) => {
+    const queryExecutor = new QueryExecutor(query, (alias) => {
       return this._repository.createQueryBuilder(alias)
     });
 
-    const queryBuilder = queryParser.parse();
-    
-    return queryBuilder.getMany();
+    const [results, count] = await Promise.all([queryExecutor.results(), queryExecutor.count()]);
+    return new Paginated(results, {count: count, offset: query.pagination.offset, limit: query.pagination.limit})
   }
 
   /**
