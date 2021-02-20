@@ -2,8 +2,9 @@ import { inject } from '@loopback/core';
 import { del, get, getModelSchemaRef, HttpErrors, param, post, requestBody } from '@loopback/rest';
 
 import { BaseController } from './base.controller';
-import { Paginated, Query, QueryPagination, User } from '../models';
+import { Paginated, Query, QueryError, QueryPagination, User } from '../models';
 import { RoleService, UserService } from '../services';
+import { Http2ServerRequest } from 'http2';
 
 export class UserController extends BaseController {
   constructor(
@@ -36,7 +37,18 @@ export class UserController extends BaseController {
     query.alias = query.alias ? query.alias : 'user';
     query.orderBy = query.orderBy ? query.orderBy : [{alias: `${query.alias}.lastName`, direction: 'ASC'}];
 
-    return await this._userService.executeSearchQuery(query);
+    try {
+      const results = await this._userService.executeSearchQuery(query);
+      return results;
+
+    } catch (error) {
+      if (error instanceof QueryError) {
+        throw new HttpErrors.BadRequest(error.message);
+      
+      } else {
+        throw new HttpErrors.InternalServerError(error.message);
+      }
+    }
   }
 
   @get('/users/{id}', {

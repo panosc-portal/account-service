@@ -83,6 +83,54 @@ describe('UserController', () => {
     expect(paginatedUsers.data.length).to.equal(1);
   });
 
+  it('invokes POST /users/search for users by two Ids', async () => {
+    const query: Query = {
+      alias: 'user',
+      filter: [
+        {alias: 'user.id', parameter: 'ids', value: '[1001, 1004]', comparator: 'IN', valueType: 'number[]'},
+      ],
+      orderBy: [{alias: 'user.id', direction: 'ASC'}]
+    }
+    const res = await client.post('/api/users/search').send(query).expect(200);
+    const paginatedUsers = res.body as Paginated<User>;
+    expect(paginatedUsers || null).to.not.be.null();
+
+    expect(paginatedUsers.meta.count).to.equal(2);
+    expect(paginatedUsers.data.length).to.equal(2);
+    expect(paginatedUsers.data[0].id).to.equal(1001);
+    expect(paginatedUsers.data[1].id).to.equal(1004);
+  });
+
+  it('fails on POST /users/search with incoherent array comparator', async () => {
+    const query: Query = {
+      alias: 'user',
+      filter: [
+        {alias: 'user.id', parameter: 'ids', value: '[1001, 1004]', comparator: '=', valueType: 'number[]'},
+      ]
+    }
+    await client.post('/api/users/search').send(query).expect(400);
+  });
+
+  it('fails on POST /users/search with incoherent array valueType', async () => {
+    const query: Query = {
+      alias: 'user',
+      filter: [
+        {alias: 'user.id', parameter: 'ids', value: '[1001, 1004]', comparator: 'IN', valueType: 'number'},
+      ]
+    }
+    await client.post('/api/users/search').send(query).expect(400);
+  });
+
+  it('fails on POST /users/search with incoherent array value', async () => {
+    const query: Query = {
+      alias: 'user',
+      filter: [
+        {alias: 'user.id', parameter: 'ids', value: '1001', comparator: 'IN', valueType: 'number[]'},
+      ]
+    }
+    await client.post('/api/users/search').send(query).expect(400);
+  });
+
   it('invokes POST /users/search for users by role equal to', async () => {
     const query: Query = {
       alias: 'user',

@@ -1,5 +1,5 @@
 import { QueryFailedError, SelectQueryBuilder } from "typeorm";
-import { Query, QueryPagination } from "../../models";
+import { Query, QueryError, QueryPagination } from "../../models";
 import { logger } from "../../utils";
 
 export class QueryExecutor<T> {
@@ -80,11 +80,53 @@ export class QueryExecutor<T> {
 
   private _appendFilters(queryBuilder: SelectQueryBuilder<T>): SelectQueryBuilder<T> {
     this._query.filter.forEach((filter, index) => {
-      const filterString = `${filter.alias} ${filter.comparator} :${filter.parameter}`;
-      const value = 
-        filter.valueType === 'number' ? +filter.value : 
-        filter.valueType === 'boolean' ? filter.value === 'true' : 
-        filter.value;
+      let isArray = false;
+      let value: any
+      if (filter.valueType === 'number') {
+        value = +filter.value;
+      
+      } else if (filter.valueType === 'boolean') {
+        value = filter.value === 'true';
+      
+      } else if (filter.valueType === 'string[]') {
+        isArray = true;
+        value = JSON.parse(filter.value);
+        if (!Array.isArray(value)) {
+          throw new QueryError('Value is not an array');
+        }
+      
+      } else if (filter.valueType === 'number[]') {
+        isArray = true;
+        const stringArray: string[] = JSON.parse(filter.value);
+        if (!Array.isArray(stringArray)) {
+          throw new QueryError('Value is not an array');
+        }
+        value = stringArray.map(element => +element);
+      
+      } else if (filter.valueType === 'boolean[]') {
+        isArray = true;
+        const stringArray: string[] = JSON.parse(filter.value);
+        if (!Array.isArray(stringArray)) {
+          throw new QueryError('Value is not an array');
+        }
+        value = stringArray.map(element => element === 'true');
+      
+      } else {
+        value = filter.value;
+      }
+
+      // Validate array has 'in' comparator
+      if (isArray && filter.comparator.toLowerCase() !== 'in') {
+        throw new QueryError('Array value type should have an IN comparator');
+
+      } else if (!isArray && filter.comparator.toLowerCase() === 'in') {
+        throw new QueryError('In comparator should have an array value type');
+      }
+
+      const filterString = isArray ? 
+        `${filter.alias} IN (:...${filter.parameter})` :
+        `${filter.alias} ${filter.comparator} :${filter.parameter}`;
+
       queryBuilder = index === 0 ?
         queryBuilder.where(filterString).setParameter(filter.parameter, value) :
         queryBuilder.andWhere(filterString).setParameter(filter.parameter, value);

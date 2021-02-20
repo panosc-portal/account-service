@@ -26,7 +26,6 @@ describe('QueryExecutor', () => {
     expect(paginatedUsers.data[0].lastName).to.equal('Murphy');
   });
 
-
   it('searches users by last name like', async () => {
     const query: Query = {
       alias: 'user',
@@ -65,6 +64,22 @@ describe('QueryExecutor', () => {
     const paginatedUsers = await context.userRepository.executeSearchQuery(query);
     expect(paginatedUsers.meta.count).to.equal(1);
     expect(paginatedUsers.data.length).to.equal(1);
+  });
+
+  it('searches users by two ids', async () => {
+    const query: Query = {
+      alias: 'user',
+      filter: [
+        {alias: 'user.id', parameter: 'ids', value: '[1001, 1004]', comparator: 'IN', valueType: 'number[]'},
+      ],
+      orderBy: [{alias: 'user.id', direction: 'ASC'}]
+    }
+
+    const paginatedUsers = await context.userRepository.executeSearchQuery(query);
+    expect(paginatedUsers.meta.count).to.equal(2);
+    expect(paginatedUsers.data.length).to.equal(2);
+    expect(paginatedUsers.data[0].id).to.equal(1001);
+    expect(paginatedUsers.data[1].id).to.equal(1004);
   });
 
   it('searches users by role equal', async () => {
