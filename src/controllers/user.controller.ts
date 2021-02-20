@@ -1,8 +1,8 @@
 import { inject } from '@loopback/core';
-import { del, get, getModelSchemaRef, param, post, requestBody } from '@loopback/rest';
+import { del, get, getModelSchemaRef, HttpErrors, param, post, requestBody } from '@loopback/rest';
 
 import { BaseController } from './base.controller';
-import { Paginated, Query, User } from '../models';
+import { Paginated, Query, QueryPagination, User } from '../models';
 import { RoleService, UserService } from '../services';
 
 export class UserController extends BaseController {
@@ -20,15 +20,22 @@ export class UserController extends BaseController {
     responses: {
       '200': {
         description: 'Ok',
-        content: {
-          'application/json': {
-            schema: { type: 'array', items: getModelSchemaRef(User) }
-          }
-        }
+        content: { 'application/json': { schema: getModelSchemaRef(Paginated) } }
       }
     }
   })
   async searchForUsers(@requestBody() query: Query): Promise<Paginated<User>> {
+    if (query == null) {
+      query = {};
+    }
+    if (query.pagination && query.pagination.limit > QueryPagination.MAX_QUERY_LIMIT) {
+      throw new HttpErrors.BadRequest(`Pagination limit must be less that ${QueryPagination.MAX_QUERY_LIMIT}`)
+    }
+
+    // Default alias and order
+    query.alias = query.alias ? query.alias : 'user';
+    query.orderBy = query.orderBy ? query.orderBy : [{alias: `${query.alias}.lastName`, direction: 'ASC'}];
+
     return await this._userService.executeSearchQuery(query);
   }
 

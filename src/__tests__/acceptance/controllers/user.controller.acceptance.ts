@@ -22,18 +22,117 @@ describe('UserController', () => {
     return givenInitialisedDatabase(datasource);
   });
 
-  it('invokes GET /users/search', async () => {
-    const query: Query = {
-    }
-    const res = await client.post('/api/users/search').send(query).expect(200);
-    const paginatedUser = res.body as Paginated<User>;
-    expect(paginatedUser || null).to.not.be.null();
+  it('invokes POST /users/search for all users', async () => {
+    const res = await client.post('/api/users/search').expect(200);
+    const paginatedUsers = res.body as Paginated<User>;
+    expect(paginatedUsers || null).to.not.be.null();
 
-    expect(paginatedUser.meta.count).to.equal(4);
-    expect(paginatedUser.data.length).to.equal(4);
-    paginatedUser.data.forEach(user => {
+    expect(paginatedUsers.meta.count).to.equal(4);
+    expect(paginatedUsers.data.length).to.equal(4);
+    paginatedUsers.data.forEach(user => {
       expect(user.id || null).to.not.be.null();
     });
+
+    // check order
+    expect(paginatedUsers.data[0].lastName).to.equal('Doe');
+  });
+
+  it('invokes POST /users/search for users with last name like', async () => {
+    const query: Query = {
+      alias: 'user',
+      filter: [
+        {alias: 'user.lastName', parameter: 'name', value: 'Mur%', comparator: 'like'}
+      ]
+    }
+    const res = await client.post('/api/users/search').send(query).expect(200);
+    const paginatedUsers = res.body as Paginated<User>;
+    expect(paginatedUsers || null).to.not.be.null();
+
+    expect(paginatedUsers.meta.count).to.equal(2);
+    expect(paginatedUsers.data.length).to.equal(2);
+  });
+
+  it('invokes POST /users/search for users with lowercase last name like', async () => {
+    const query: Query = {
+      alias: 'user',
+      filter: [
+        {alias: 'lower(user.lastName)', parameter: 'name', value: 'mur%', comparator: 'like'}
+      ]
+    }
+    const res = await client.post('/api/users/search').send(query).expect(200);
+    const paginatedUsers = res.body as Paginated<User>;
+    expect(paginatedUsers || null).to.not.be.null();
+
+    expect(paginatedUsers.meta.count).to.equal(2);
+    expect(paginatedUsers.data.length).to.equal(2);
+  });
+
+  it('invokes POST /users/search for users by name and id', async () => {
+    const query: Query = {
+      alias: 'user',
+      filter: [
+        {alias: 'lower(user.lastName)', parameter: 'name', value: 'mur%', comparator: 'like'},
+        {alias: 'user.id', parameter: 'id', value: '1002', comparator: '>', valueType: 'number'},
+      ]
+    }
+    const res = await client.post('/api/users/search').send(query).expect(200);
+    const paginatedUsers = res.body as Paginated<User>;
+    expect(paginatedUsers || null).to.not.be.null();
+
+    expect(paginatedUsers.meta.count).to.equal(1);
+    expect(paginatedUsers.data.length).to.equal(1);
+  });
+
+  it('invokes POST /users/search for users by role equal to', async () => {
+    const query: Query = {
+      alias: 'user',
+      join: [
+        {member: 'user.roles', alias: 'role', select: true, type: 'LEFT_OUTER_JOIN'}
+      ],
+      filter: [
+        {alias: 'role.name', parameter: 'name', value: 'STAFF', comparator: '='}
+      ]
+    }
+    const res = await client.post('/api/users/search').send(query).expect(200);
+    const paginatedUsers = res.body as Paginated<User>;
+    expect(paginatedUsers || null).to.not.be.null();
+
+    expect(paginatedUsers.meta.count).to.equal(2);
+    expect(paginatedUsers.data.length).to.equal(2);
+  });
+
+  it('invokes POST /users/search orders by id desc', async () => {
+    const query: Query = {
+      alias: 'user',
+      orderBy: [
+        {alias: 'user.id', direction: 'DESC'}
+      ]
+    }
+    const res = await client.post('/api/users/search').send(query).expect(200);
+    const paginatedUsers = res.body as Paginated<User>;
+    expect(paginatedUsers || null).to.not.be.null();
+
+    expect(paginatedUsers.meta.count).to.equal(4);
+    expect(paginatedUsers.data.length).to.equal(4);
+    expect(paginatedUsers.data[0].id).to.equal(1004);
+  });
+
+  it('invokes POST /users/search paginates', async () => {
+    const query: Query = {
+      alias: 'user',
+      orderBy: [
+        {alias: 'user.id', direction: 'DESC'}
+      ],
+      pagination: {
+        limit: 1, 
+        offset: 1
+      }
+    }
+    const res = await client.post('/api/users/search').send(query).expect(200);
+    const paginatedUsers = res.body as Paginated<User>;
+    expect(paginatedUsers.meta.count).to.equal(4);
+    expect(paginatedUsers.data.length).to.equal(1);
+    expect(paginatedUsers.data[0].id).to.equal(1003);
   });
 
   it('invokes GET /users/{id}', async () => {

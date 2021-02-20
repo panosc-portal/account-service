@@ -19,7 +19,7 @@ describe('UserService', () => {
   });
 
   it('gets a user', async () => {
-    const user = await context.userService.getById(1001);
+    const user = await context.userService.getById(1003);
 
     expect(user || null).to.not.be.null();
     expect(user.email).to.equal('john.doe@mail.net');
