@@ -1,9 +1,9 @@
 import { Client, expect } from '@loopback/testlab';
-import { AccountServiceApplication } from '../../..';
-import { setupApplication } from '../../helpers/application.helper';
-import { givenInitialisedDatabase } from '../../helpers/database.helper';
-import { TypeORMDataSource } from '../../../datasources';
-import { Paginated, Query, User } from '../../../models';
+import { AccountServiceApplication } from '../..';
+import { setupApplication } from '../helpers/application.helper';
+import { givenInitialisedDatabase } from '../helpers/database.helper';
+import { TypeORMDataSource } from '../../datasources';
+import { Paginated, Query, User } from '../../models';
 
 describe('UserController', () => {
   let app: AccountServiceApplication;
