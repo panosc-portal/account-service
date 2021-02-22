@@ -33,3 +33,6 @@ jobs:
         ACCOUNT_SERVICE_DATABASE_NAME: ":memory:"
         ACCOUNT_SERVICE_DATABASE_SYNCHRONIZE: "true"
         ACCOUNT_SERVICE_DATABASE_LOGGING: "false"
+        ACCOUNT_SERVICE_LOG_LEVEL: "ERROR"
+        ACCOUNT_SERVICE_ATTRIBUTE_PROVIDER: "accountAttributeProviders/simple-keycloak-provider.js"
+
