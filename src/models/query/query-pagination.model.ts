@@ -1,5 +1,4 @@
 export class QueryPagination {
-  static MAX_QUERY_LIMIT: 200;
   offset: number;
   limit: number;
 

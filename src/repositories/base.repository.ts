@@ -99,7 +99,7 @@ export class BaseRepository<T, ID> {
     });
 
     const [results, count] = await Promise.all([queryExecutor.results(), queryExecutor.count()]);
-    return new Paginated(results, {count: count, offset: query.pagination.offset, limit: query.pagination.limit})
+    return new Paginated(results, count, query.pagination)
   }
 
   /**

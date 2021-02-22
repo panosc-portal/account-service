@@ -1,5 +1,5 @@
-import { QueryFailedError, SelectQueryBuilder } from "typeorm";
-import { Query, QueryError, QueryPagination } from "../../models";
+import { SelectQueryBuilder } from "typeorm";
+import { Query, QueryError } from "../../models";
 import { logger } from "../../utils";
 
 export class QueryExecutor<T> {
@@ -9,7 +9,6 @@ export class QueryExecutor<T> {
     this._query.join = this._query.join ? this._query.join : [];
     this._query.filter = this._query.filter ? this._query.filter : [];
     this._query.orderBy = this._query.orderBy ? this._query.orderBy : [];
-    this._query.pagination = this._query.pagination ? this._query.pagination : new QueryPagination({offset: 0, limit: QueryPagination.MAX_QUERY_LIMIT});
   }
 
   async results(): Promise<T[]> {
@@ -30,8 +29,10 @@ export class QueryExecutor<T> {
     });
 
     // Handle pagination
-    queryBuilder.limit(this._query.pagination.limit);
-    queryBuilder.offset(this._query.pagination.offset);
+    if (this._query.pagination) {
+      queryBuilder.limit(this._query.pagination.limit);
+      queryBuilder.offset(this._query.pagination.offset);
+    }
 
     const results = await queryBuilder.getMany();
     return results;

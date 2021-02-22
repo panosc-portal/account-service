@@ -40,7 +40,6 @@ The following environment variables are used to configure the Account Service an
 | ---- | ---- | ---- |
 | ACCOUNT_SERVICE_IDP | | URL to the OpenID discovery endpoint (eg https://server.com/.well-known/openid-configuration) |
 | ACCOUNT_SERVICE_CLIENT_ID | | The Client ID as configured by the OpenID provider
-| ACCOUNT_SERVICE_LOGIN_FIELD | | The attribute name of the data returned by the IDP providing the login of the connected user
 | ACCOUNT_SERVICE_DATABASE_TYPE | | The type of database (eg postgres) |
 | ACCOUNT_SERVICE_DATABASE_HOST | | The host of the database |
 | ACCOUNT_SERVICE_DATABASE_PORT | | The port of the database |
@@ -51,5 +50,5 @@ The following environment variables are used to configure the Account Service an
 | ACCOUNT_SERVICE_DATABASE_SYNCHRONIZE | false | Automatically generated the database structure |
 | ACCOUNT_SERVICE_DATABASE_LOGGING | false | Provides detailed SQL logging |
 | ACCOUNT_SERVICE_LOG_LEVEL | 'info' | Application logging level |
-| ACCOUNT_SERVICE_ATTRIBUTE_PROVIDER | | Absolute path to the attribute provider |
+| ACCOUNT_SERVICE_ATTRIBUTE_PROVIDER | | Path to the attribute provider |
 

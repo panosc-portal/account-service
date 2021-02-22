@@ -29,9 +29,6 @@ export class UserController extends BaseController {
     if (query == null) {
       query = {};
     }
-    if (query.pagination && query.pagination.limit > QueryPagination.MAX_QUERY_LIMIT) {
-      throw new HttpErrors.BadRequest(`Pagination limit must be less that ${QueryPagination.MAX_QUERY_LIMIT}`)
-    }
 
     // Default alias and order
     query.alias = query.alias ? query.alias : 'user';
