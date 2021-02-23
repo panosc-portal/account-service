@@ -61,8 +61,8 @@ export class QueryExecutor<T> {
 
   private _appendJoins(queryBuilder: SelectQueryBuilder<T>, allowSelect: boolean = true): SelectQueryBuilder<T> {
     this._query.join.forEach(join => {
-      if (join.type === 'LEFT_JOIN' && join.select) {
-        queryBuilder = (join.select &&  allowSelect) ? 
+      if (join.type === 'LEFT_JOIN') {
+        queryBuilder = (join.select && allowSelect) ? 
           queryBuilder.innerJoinAndSelect(join.member, join.alias) : 
           queryBuilder.innerJoin(join.member, join.alias);
 
