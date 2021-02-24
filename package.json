@@ -31,8 +31,7 @@
     "prestart": "npm run build",
     "start": "node -r source-map-support/register .",
     "debug": "nodemon -r source-map-support/register --inspect=0.0.0.0 .",
-    "prepublishOnly": "npm run test",
-    "preinstall": "npx npm-force-resolutions"
+    "prepublishOnly": "npm run test"
   },
   "repository": {
     "type": "git"
