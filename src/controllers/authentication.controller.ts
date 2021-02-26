@@ -3,16 +3,13 @@ import { get, getModelSchemaRef, HttpErrors, param, } from '@loopback/rest';
 
 import { BaseController } from './base.controller';
 import { Account, AuthenticationToken } from '../models';
-import { AccountService, AuthenticationService, RoleService, UserService } from '../services';
+import { AccountService, AuthenticationService, UserService } from '../services';
 import { AuthenticationError, logger } from '../utils';
-import { AttributeService } from '../services/attribute.service';
 
 export class AccountController extends BaseController {
   constructor(
     @inject('services.AccountService') private _accountService: AccountService,
     @inject('services.UserService') private _userService: UserService,
-    @inject('services.RoleService') private _roleService: RoleService,
-    @inject('services.AttributeService') private _attributeService: AttributeService,
     @inject('services.AuthenticationService') private _authenticationService: AuthenticationService) {
       super();
   }
