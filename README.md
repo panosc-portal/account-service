@@ -189,4 +189,5 @@ The following environment variables are used to configure the Account Service an
 | ACCOUNT_SERVICE_DATABASE_LOGGING | false | Provides detailed SQL logging |
 | ACCOUNT_SERVICE_LOG_LEVEL | 'info' | Application logging level |
 | ACCOUNT_SERVICE_ATTRIBUTE_PROVIDER | | Path to the attribute provider |
+| PORTAL_GATEWAY_HOST | kong:8000 | The hostname and port of the Kong Gateway |
 

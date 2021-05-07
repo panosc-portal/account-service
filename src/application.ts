@@ -19,7 +19,7 @@ export class AccountServiceApplication extends BootMixin(ServiceMixin(Repository
     // Set up default home page
     this.static('/', path.join(__dirname, '../public'));
 
-    this.basePath('/api/v1');
+    this.basePath('/api');
 
     // Customize @loopback/rest-explorer configuration here
     this.bind(RestExplorerBindings.CONFIG).to({
