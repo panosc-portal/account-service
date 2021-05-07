@@ -1,14 +1,15 @@
 import { APPLICATION_CONFIG } from '../application-config';
 import { Client, Issuer, UserinfoResponse, custom } from 'openid-client';
-import { LifeCycleObserver, lifeCycleObserver } from '@loopback/core';
-import { AuthenticationError, logger } from '../utils';
+import { LifeCycleObserver, lifeCycleObserver, inject } from '@loopback/core';
+import { AuthenticationError } from '../utils';
+import { PanoscCommonTsComponentBindings, ILogger } from '@panosc-portal/panosc-common-ts';
 
 @lifeCycleObserver('datasource')
 export class OpenIDDataSource implements LifeCycleObserver {
   static dataSourceName = 'open-id';
 
   private _client: Client;
-
+ 
   get client(): Promise<Client> {
     if (this._client == null) {
       return this.createClient();
@@ -18,7 +19,7 @@ export class OpenIDDataSource implements LifeCycleObserver {
     });
   }
 
-  constructor() {
+  constructor(@inject(PanoscCommonTsComponentBindings.LOGGER) private _logger: ILogger) {
   }
 
   /**
@@ -29,7 +30,7 @@ export class OpenIDDataSource implements LifeCycleObserver {
       return;
     }
 
-    logger.info('Initialising openid provider');
+    this._logger.info('Initialising openid provider');
     this._client = await this.createClient();
   }
 
@@ -45,7 +46,7 @@ export class OpenIDDataSource implements LifeCycleObserver {
 
       return client;
     } catch (error) {
-      logger.error(`Could not create client for OpenID Connect provider at ${idpUrl} : ${error.message}`);
+      this._logger.error(`Could not create client for OpenID Connect provider at ${idpUrl} : ${error.message}`);
 
       process.exit();
     }

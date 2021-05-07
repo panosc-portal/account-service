@@ -20,6 +20,10 @@ export class ApplicationConfig {
     clientId: string;
   };
 
+  gateway: {
+    host: string;
+  }
+
   attributeProviderPath: string;
 
   constructor(data?: Partial<ApplicationConfig>) {
@@ -49,6 +53,9 @@ export function APPLICATION_CONFIG(): ApplicationConfig {
       idp: {
         url: process.env.ACCOUNT_SERVICE_IDP,
         clientId: process.env.ACCOUNT_SERVICE_CLIENT_ID,
+      },
+      gateway: {
+        host: process.env.PORTAL_GATEWAY_HOST
       },
       attributeProviderPath: process.env.ACCOUNT_SERVICE_ATTRIBUTE_PROVIDER
     };

@@ -6,6 +6,8 @@ import { RestApplication } from '@loopback/rest';
 import { ServiceMixin } from '@loopback/service-proxy';
 import path from 'path';
 import { MySequence } from './sequence';
+import { PanoscCommonTsComponent, PanoscCommonTsComponentBindings } from '@panosc-portal/panosc-common-ts';
+import { APPLICATION_CONFIG } from './application-config';
 
 export class AccountServiceApplication extends BootMixin(ServiceMixin(RepositoryMixin(RestApplication))) {
   constructor(options: ApplicationConfig = {}) {
@@ -17,13 +19,20 @@ export class AccountServiceApplication extends BootMixin(ServiceMixin(Repository
     // Set up default home page
     this.static('/', path.join(__dirname, '../public'));
 
-    this.basePath('/api');
+    this.basePath('/api/v1');
 
     // Customize @loopback/rest-explorer configuration here
     this.bind(RestExplorerBindings.CONFIG).to({
       path: '/explorer'
     });
     this.component(RestExplorerComponent);
+
+    this.component(PanoscCommonTsComponent);
+    this.configure(PanoscCommonTsComponentBindings.COMPONENT).to({
+      defaultGatewayHost: APPLICATION_CONFIG().gateway.host,
+      consoleLoggerThreshold: APPLICATION_CONFIG().logging.level,
+      applicationName: 'account-service'
+    });
 
     this.projectRoot = __dirname;
     // Customize @loopback/boot Booter Conventions here

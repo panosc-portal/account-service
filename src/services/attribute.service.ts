@@ -1,6 +1,6 @@
-import { bind, BindingScope, LifeCycleObserver, lifeCycleObserver } from '@loopback/core';
+import { bind, BindingScope, LifeCycleObserver, lifeCycleObserver, inject } from '@loopback/core';
 import { DefaultAttributeProvider, IAttributeProvider, UserInfo } from '../models';
-import { LoggedError, logger } from '../utils';
+import { PanoscCommonTsComponentBindings, ILogger } from '@panosc-portal/panosc-common-ts';
 import { APPLICATION_CONFIG } from '../application-config';
 
 @bind({ scope: BindingScope.SINGLETON })
@@ -8,6 +8,9 @@ import { APPLICATION_CONFIG } from '../application-config';
 export class AttributeService implements LifeCycleObserver, IAttributeProvider {
 
   private _attributeProvider: IAttributeProvider;
+
+  @inject(PanoscCommonTsComponentBindings.LOGGER)
+  private _logger: ILogger;
 
   constructor() {
     this._attributeProvider = new DefaultAttributeProvider();
@@ -21,12 +24,12 @@ export class AttributeService implements LifeCycleObserver, IAttributeProvider {
       process.exit();
     
     } else {
-      logger.info(`Loaded account attribute provider from path '${attributeProviderPath}'`);
+      this._logger.info(`Loaded account attribute provider from path '${attributeProviderPath}'`);
       // Override functions of default attribute provider
       Object.keys(customAttributeProvider)
         .filter(key => typeof customAttributeProvider[key] === 'function')
         .forEach(key => {
-          logger.info(`Overriding ${key} method of attribute provider`);
+          this._logger.info(`Overriding ${key} method of attribute provider`);
           this._attributeProvider[key] = customAttributeProvider[key];
         });
 
@@ -66,7 +69,7 @@ export class AttributeService implements LifeCycleObserver, IAttributeProvider {
   }
 
   private _loadProvider(attributeProviderPath: string): IAttributeProvider {
-    logger.info(`Loading attribute provider with the file path '${attributeProviderPath}'`);
+    this._logger.info(`Loading attribute provider with the file path '${attributeProviderPath}'`);
     if (attributeProviderPath != null) {
       try {
         let fullPath = attributeProviderPath;
@@ -80,7 +83,7 @@ export class AttributeService implements LifeCycleObserver, IAttributeProvider {
         }
 
       } catch (error) {
-        logger.error(`Could not load attribute provider with the file path '${attributeProviderPath}'`);
+        this._logger.error(`Could not load attribute provider with the file path '${attributeProviderPath}'`);
       }
     }
 
@@ -89,11 +92,11 @@ export class AttributeService implements LifeCycleObserver, IAttributeProvider {
 
   private _validateProvider(attributeProvider: IAttributeProvider) {
     if (!attributeProvider) {
-      logger.error('The attribute provider path has not been specified');
+      this._logger.error('The attribute provider path has not been specified');
       return false
     
     } else if (!attributeProvider.getUserId) {
-      logger.error('Incomplete IAttributeProvider interface: missing getUserId method');
+      this._logger.error('Incomplete IAttributeProvider interface: missing getUserId method');
       return false;
 
     } else {
