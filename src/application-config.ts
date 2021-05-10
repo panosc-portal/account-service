@@ -55,7 +55,7 @@ export function APPLICATION_CONFIG(): ApplicationConfig {
         clientId: process.env.ACCOUNT_SERVICE_CLIENT_ID,
       },
       gateway: {
-        host: process.env.PORTAL_GATEWAY_HOST
+        host: process.env.PORTAL_GATEWAY_HOST || 'kong:8000'
       },
       attributeProviderPath: process.env.ACCOUNT_SERVICE_ATTRIBUTE_PROVIDER
     };
