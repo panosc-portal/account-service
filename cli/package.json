@@ -1,0 +1,76 @@
+{
+  "name": "account-service-client-cli",
+  "description": "A PaNOSC Account Service Client CLI to test the Account Service APIs",
+  "version": "1.0.0",
+  "keywords": [
+    "panosc",
+    "panosc-portal"
+  ],
+  "main": "dist/index.js",
+  "bin": {
+    "account-service": "./bin/run"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "scripts": {
+    "postpack": "rm -f oclif.manifest.json",
+    "posttest": "npm run eslint",
+    "eslint": "eslint . --ext .ts --config .eslintrc",
+    "eslint:fix": "eslint . --ext .ts --config .eslintrc --fix",
+    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+    "version": "oclif-dev readme && git add README.md"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://code.ill.fr/panosc/data-analysis-services/account-service-client-cli.git"
+  },
+  "author": "Eric Pellegrini",
+  "license": "MIT",
+  "dependencies": {
+    "@oclif/command": "^1",
+    "@oclif/config": "^1",
+    "@oclif/plugin-help": "^2",
+    "axios": "^0.19.0",
+    "console-table-printer": "^1.1.27",
+    "inquirer": "^7.0.0",
+    "tslib": "^1"
+  },
+  "devDependencies": {
+    "@oclif/dev-cli": "^1",
+    "@oclif/test": "^1",
+    "@types/chai": "^4",
+    "@types/inquirer": "^6.5.0",
+    "@types/mocha": "^5",
+    "@types/node": "^10",
+    "chai": "^4",
+    "eslint": "^5.13",
+    "eslint-config-oclif": "^3.1",
+    "eslint-config-oclif-typescript": "^0.1",
+    "globby": "^10",
+    "mocha": "^5",
+    "nyc": "^14",
+    "ts-node": "^8",
+    "typescript": "^3.3"
+  },
+  "files": [
+    "/bin",
+    "/lib",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json"
+  ],
+  "oclif": {
+    "commands": "./dist/commands",
+    "bin": "account-service",
+    "plugins": [
+      "@oclif/plugin-help"
+    ],
+    "topics": {
+      "role": {
+        "description": "performs role related operations"
+      }
+    }
+  },
+  "types": "dist/index.d.ts"
+} 
